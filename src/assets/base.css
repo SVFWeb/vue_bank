@@ -1,0 +1,48 @@
+/* reset.css */
+ 
+/* 1. Remove default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* 使元素的宽高包括内边距和边框 */
+}
+
+/* 2. Set default font properties */
+body {
+  font-family: Arial, sans-serif; /* 设置默认字体 */
+  line-height: 1.5; /* 设置行高 */
+}
+
+/* 3. Remove list styles */
+ul, ol {
+  list-style: none; /* 去掉列表的默认样式 */
+}
+
+/* 4. Remove link styles */
+a {
+  text-decoration: none; /* 去掉链接的下划线 */
+  color: inherit; /* 使链接颜色继承自父元素 */
+}
+
+/* 5. Set default table styles */
+table {
+  border-collapse: collapse; /* 合并表格边框 */
+  width: 100%; /* 表格宽度100% */
+}
+
+/* 6. Set default image styles */
+img {
+  max-width: 100%; /* 使图片自适应容器宽度 */
+  height: auto; /* 保持图片比例 */
+}
+
+/* 7. Set default heading styles */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal; /* 设置标题的字体粗细 */
+}
+
+/* 8. Set default form styles */
+input, textarea, select {
+  font-family: inherit; /* 使输入框字体继承自父元素 */
+  font-size: inherit; /* 使输入框字体大小继承自父元素 */
+}

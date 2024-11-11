@@ -3,7 +3,8 @@
     <div class="home_container">
       <div class="home_top">
         <div class="top">
-          <div class="top_avatar"></div>
+
+          <el-avatar size="large" class="top_avatar" :icon="UserFilled" />
 
           <div class="top_info">
             <div class="info_usrname">
@@ -59,7 +60,7 @@
 </template>
 
 <script setup>
-import { Coin } from '@element-plus/icons-vue'
+import { Coin,UserFilled } from '@element-plus/icons-vue'
 </script>
 
 <style lang="less" scoped>
@@ -88,8 +89,9 @@ import { Coin } from '@element-plus/icons-vue'
           height: 92px;
           margin-right: 16px;
           border-radius: 50%;
-          background-image: url('../../../public/image/avatar.jpg');
-          background-position: center;
+          font-size: 50px;
+          color: var(--el-color-primary);
+          background-color: #f1f4f4fb;
         }
 
         .top_info {

@@ -35,7 +35,7 @@
               </div>
 
               <div class="controls">
-                <el-button  plain>转账</el-button>
+                <el-button plain>转账</el-button>
                 <el-button plain>充值</el-button>
                 <el-button plain>提现</el-button>
               </div>
@@ -43,13 +43,86 @@
           </div>
         </div>
 
-        <div class="fund_flow"></div>
+        <div class="fund_flow">
+          <div class="head">
+            <span>资金流水</span>
+          </div>
+
+          <div class="flow_form">
+            <el-table :data="tableData" style="width: 100%" height="250">
+              <el-table-column fixed prop="date" label="交易时间" width="250" />
+              <el-table-column prop="name" label="用户账户" width="300" />
+              <el-table-column prop="zip" label="财务类型" width="220" />
+              <el-table-column prop="state" label="收支金额" width="220" />
+              <el-table-column prop="city" label="账户余额" width="220" />
+            </el-table>
+          </div>
+        </div>
       </div>
     </el-scrollbar>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const tableData = [
+  {
+    date: '2016-05-03',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+  {
+    date: '2016-05-04',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+  {
+    date: '2016-05-01',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+  {
+    date: '2016-05-08',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+  {
+    date: '2016-05-06',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+  {
+    date: '2016-05-07',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+  },
+]
+</script>
 
 <style lang="less" scoped>
 .fund {
@@ -112,9 +185,26 @@
     }
 
     .fund_flow {
-      // width: 100%;
-      // height: 409px;
-      // background-color: pink;
+      margin-top: 20px;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 8px;
+
+      .head {
+        padding: 0 24px;
+        height: 60px;
+        line-height: 60px;
+        border-bottom: 1px solid #f0f5f0;
+        span {
+          font-family: PingFangSC-Semibold;
+          font-size: 18px;
+        }
+      }
+
+      .flow_form{
+        padding: 0 20px;
+        margin-top: 20px
+      }
     }
   }
 }

@@ -20,7 +20,8 @@
       </el-dropdown>
 
       <div class="text">
-        <span>张先生</span>
+        <span style="margin-right: 10px;">张先生</span>
+        <span>欢迎您！</span>
       </div>
     </div>
   </div>

@@ -199,7 +199,6 @@ const subim_form = async() =>{
                 </div>
             </div>
         </div>
-
         <div class="main_item">
             <div class="main_item_top">
                 科技贷
@@ -228,7 +227,7 @@ const subim_form = async() =>{
                 </div>
             </div>
         </div>
-       
+
     </div>
 
     <!-- 申请贷款的弹出层 -->

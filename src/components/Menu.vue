@@ -6,7 +6,9 @@
           <el-menu router :default-active="route.path" :default-openeds="['1', '2', '3']" class="el-menu-vertical-demo">
             <el-sub-menu :index="'1'">
               <template #title>
-                <el-icon><location /></el-icon>
+                <el-icon>
+                  <location />
+                </el-icon>
                 <span>账户管理</span>
               </template>
 
@@ -20,6 +22,19 @@
             <el-sub-menu :index="'2'">
               <template #title>
                 <el-icon><icon-menu /></el-icon>
+                <span>资金服务</span>
+              </template>
+
+              <el-menu-item-group>
+                <el-menu-item index="/serve/topfunds">充值</el-menu-item>
+                <el-menu-item index="3-2">提现</el-menu-item>
+                <el-menu-item index="3-3">转账</el-menu-item>
+              </el-menu-item-group>
+            </el-sub-menu>
+
+            <el-sub-menu :index="'3'">
+              <template #title>
+                <el-icon><icon-menu /></el-icon>
                 <span>贷款</span>
               </template>
 
@@ -31,18 +46,7 @@
               </el-menu-item-group>
             </el-sub-menu>
 
-            <el-sub-menu :index="'3'">
-              <template #title>
-                <el-icon><icon-menu /></el-icon>
-                <span>Navigator Three</span>
-              </template>
 
-              <el-menu-item-group>
-                <el-menu-item index="3-1">item one</el-menu-item>
-                <el-menu-item index="3-2">item two</el-menu-item>
-                <el-menu-item index="3-3">item three</el-menu-item>
-              </el-menu-item-group>
-            </el-sub-menu>
           </el-menu>
         </el-col>
       </el-row>

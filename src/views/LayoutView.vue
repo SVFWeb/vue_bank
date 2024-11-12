@@ -52,7 +52,7 @@ import Tabber from '@/components/Tabber.vue';
       top: 80px;
       width: calc(100% - 260px);
       height: calc(100vh - 80px);
-      background: #f5f6f7;
+      background: #f0f1ef;
     }
   }
 }

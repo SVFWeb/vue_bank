@@ -8,6 +8,10 @@ import SettingsView from '@/views/Home/SettingsView.vue'
 // 我的财富
 import WealthView from '@/views/Home/FundView.vue'
 
+// ----资金服务
+import TopFundsView from '@/views/Serve/TopFundsView.vue'
+
+
 // ----贷款
 import LoanView from '@/views/Loan/LoanView.vue'
 import ApplyLoanView from '@/views/Loan/ApplyLoanView.vue'
@@ -22,6 +26,7 @@ import SignView from '@/views/SignView.vue'
 import ForgotView from '@/views/ForgotView.vue'
 // 布局
 import LayoutView from '@/views/LayoutView.vue'
+
 
 
 
@@ -56,6 +61,20 @@ const router = createRouter({
         }
       ]
     },
+    // 资金服务
+    {
+      path:'/serve',
+      redirect:'',
+      component:LayoutView,
+      children:[
+        {
+          //充值
+          path:'/serve/topfunds',
+          name:'topfunds',
+          component:TopFundsView,
+        }
+      ]
+    },
     // 贷款
     {
       path: '/loan',
@@ -82,8 +101,6 @@ const router = createRouter({
 
       ]
     },
-
-
 
 
 

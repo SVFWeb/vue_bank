@@ -27,7 +27,7 @@
 
               <el-menu-item-group>
                 <el-menu-item index="/serve/topfunds">充值</el-menu-item>
-                <el-menu-item index="3-2">提现</el-menu-item>
+                <el-menu-item index="/serve/withdraw">提现</el-menu-item>
                 <el-menu-item index="3-3">转账</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>

@@ -25,8 +25,6 @@ onMounted(() =>{
                     <p class="DK_suss">贷款已完成:{{ item.cName }}</p>
                     <p>
                         <span>贷款时间：{{ item.cTime }}</span>
-                       
-                        
                     </p>
                     <p>
                         <span>贷款名称：科技贷</span>

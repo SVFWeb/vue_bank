@@ -9,8 +9,10 @@ import SettingsView from '@/views/Home/SettingsView.vue'
 import WealthView from '@/views/Home/FundView.vue'
 
 // ----资金服务
+// 充值
 import TopFundsView from '@/views/Serve/TopFundsView.vue'
-
+// 提现
+import WithdrawView from '@/views/Serve/WithdrawView.vue'
 
 // ----贷款
 import LoanView from '@/views/Loan/LoanView.vue'
@@ -72,6 +74,12 @@ const router = createRouter({
           path:'/serve/topfunds',
           name:'topfunds',
           component:TopFundsView,
+        },
+        {
+          // 提现
+          path:'/serve/withdraw',
+          name:'withdraw',
+          component:WithdrawView
         }
       ]
     },

@@ -161,6 +161,7 @@ function againTopFunds() {
         width: 950px;
         height: 500px;
         background-color: #ffffff;
+        box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.04);
 
         .topfunds_balance {
             display: flex;

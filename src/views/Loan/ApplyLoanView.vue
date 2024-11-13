@@ -349,146 +349,128 @@ const subim_form = async () => {
 </template>
 
 <style lang="less" scoped>
-.main_top {
+.main_top{
     width: 1200px;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    margin: 0 auto;
-
-    .main_top_list {
+    margin:  0 auto;
+   
+    .main_top_list{
         width: 1176px;
-
-        display: flex;
-        justify-content: space-around;
-        background-color: white;
-        margin-bottom: 40px;
-
-        .main_top_list_item {
       
        display: flex;
        justify-content: space-around;
        background-color: white;
-       padding: 30px 0;
        margin-bottom: 40px;
+       padding: 30px 0;
         .main_top_list_item{
 
             width: 280px;
             height: 52px;
             display: flex;
             justify-content: space-around;
-            flex-wrap: nowrap;
+            flex-wrap:nowrap;
             flex: .4;
             margin-left: 10px;
-
-            .list_item_right {
-                p {
-                    width: 200px;
-                }
+            .list_item_right{
+               p{
+                width: 200px;
+               }
 
             }
-
-            & .list_item_right p:nth-child(1) {
+            & .list_item_right p:nth-child(1){
                 font-size: 18px;
                 font-weight: bold;
             }
-
+            & .list_item_right p:nth-child(4){
+               
+            }
         }
-
+       
 
     }
 
-    .main_item {
+    .main_item{
         width: 580px;
         height: 250px;
         background-color: white;
-        padding: 50px 30px 0 30px;
-
+        padding:  50px 30px 0 30px ;
+      
         text-align: center;
         position: relative;
         margin-bottom: 40px;
 
-        .main_item_top {
+        .main_item_top{
             position: absolute;
             left: 240px;
             top: 6px;
             font-size: 18px;
         }
-
-        hr {
+        hr{
             margin: 30px 0 18px 0;
         }
-
-        .main_item_banner {
-            color: #666;
+        .main_item_banner{
+           color: #666;
             font-size: 18px;
         }
-
-        .main_item_center {
+        .main_item_center{
             font-size: 14px;
             margin-top: 40px;
             color: #999;
-
-            span {
-                display: inline-block;
-                padding: 0 15px;
+            span{
+                display:inline-block;
+                padding:  0 15px;
                 color: #00c06f;
             }
         }
 
-        .main_item_butt {
+        .main_item_butt{
             display: flex;
             justify-content: space-between;
 
-            .main_item_butt_text {
+            .main_item_butt_text{
                 width: 175px;
-
-                p {
+                p{
                     font-weight: bold;
                 }
-
-                .text_col {
+                .text_col{
                     color: orange;
                 }
 
-                .butt_text_fon {
+                .butt_text_fon{
                     font-size: 14px;
                     color: #999;
-                    font-weight: normal;
+                    font-weight:normal;
                 }
 
             }
-
+          
         }
 
     }
 }
-
-.main_form_item {
+.main_form_item{
     padding: 0 40px;
-
-    .form_button {
+    .form_button{
         width: 100%;
     }
-
-    .xieyi {
+  
+    .xieyi{
         display: flex;
         justify-content: flex-start;
         margin-bottom: 10px;
-
-        p {
+        p{
             line-height: 34px;
         }
 
-        .xie_butt {
-            text-decoration: underline;
+        .xie_butt{
+            text-decoration:underline;
         }
     }
 }
-}
-.user_xieyi,
-.user_yinsi {
+  .user_xieyi,.user_yinsi{
     text-align: center;
     margin-bottom: 20px;
-}
+  }
 </style>

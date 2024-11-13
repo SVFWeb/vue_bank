@@ -19,11 +19,12 @@
 
                 <el-divider />
 
-                <div class="withdraw_form">
-                    <el-form>
+                <div v-loading="loading" class="withdraw_form">
+                    <el-form :model="form" label-width="auto" style="max-width: 200px" :rules="rules" ref="ruleFormRef">
                         <el-form-item label="选择银行卡：">
                             <ul class="withdraw_list">
-                                <li :class="{ active: isActive === index }" v-for="(item, index) in 5" :key="index">
+                                <li @click="isActive = index" :class="{ active: isActive === index }"
+                                    v-for="(item, index) in 5" :key="index">
                                     <div class="right">
                                         <img :src="`../../../public/image/TopFunds/1000${index + 1}.png`" alt="" />
                                         <span>尾号：{{ randomNumber * (index + 1) }}</span>
@@ -36,18 +37,30 @@
                                 </li>
                             </ul>
                         </el-form-item>
-                        <el-form-item label="提现金额：">
-
+                        <el-form-item prop="funds" label="提现金额：">
+                            <el-input style="width: 100px;" v-model="form.funds" />
                         </el-form-item>
-                        <el-form-item label="支付密码：">
-
+                        <el-form-item prop="password" label="支付密码：">
+                            <el-input style="width: 100px;" v-model="form.password" />
                         </el-form-item>
 
                         <el-form-item>
-
+                            <el-button type="primary" @click="submitForm(ruleFormRef)">确认提现</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
+
+                <el-dialog v-model="dialogVisible" title="请确认提现" width="500" :before-close="handleClose">
+                    <span>提现余额为：{{ form.funds }} 元</span>
+
+                    <template #footer>
+                        <div class="dialog-footer">
+                            <el-button type="primary" @click="againWithdraw">
+                                确认
+                            </el-button>
+                        </div>
+                    </template>
+                </el-dialog>
 
             </div>
         </el-scrollbar>
@@ -55,10 +68,44 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 const randomNumber = ref(Math.floor(Math.random() * (1000 - 99 + 1)) + 1000)
 // 当前选择的银行卡
 const isActive = ref(0)
+const ruleFormRef = ref()
+const dialogVisible = ref(false)
+// 加载
+const loading = ref(false)
+
+const form = reactive({
+    funds: '',
+    password: ''
+})
+
+const rules = reactive({
+    funds: [{ required: true, message: '请输入正确的金额', trigger: 'change' },],
+    password: [{ required: true, message: '支付密码不能为空', trigger: 'change' },]
+})
+
+// 表单校验
+const submitForm = async (formEl) => {
+    if (!formEl) return
+    await formEl.validate((valid, fields) => {
+        if (valid) {
+            dialogVisible.value = true
+        }
+    })
+}
+
+function againWithdraw() {
+    dialogVisible.value = false
+    // 请求接口
+    loading.value = true
+    setTimeout(() => {
+        loading.value = false
+    }, 2000)
+    //显示充值成功的提示
+}
 
 </script>
 
@@ -102,7 +149,7 @@ const isActive = ref(0)
         }
 
         .withdraw_form {
-            padding: 15px;
+            padding: 15px 15px 15px 100px;
             width: 100%;
             height: 600px;
 

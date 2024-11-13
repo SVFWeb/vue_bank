@@ -13,6 +13,8 @@ import WealthView from '@/views/Home/FundView.vue'
 import TopFundsView from '@/views/Serve/TopFundsView.vue'
 // 提现
 import WithdrawView from '@/views/Serve/WithdrawView.vue'
+// 转账
+import TransferView from '@/views/Serve/TransferView.vue'
 
 // ----贷款
 import LoanView from '@/views/Loan/LoanView.vue'
@@ -28,6 +30,7 @@ import SignView from '@/views/SignView.vue'
 import ForgotView from '@/views/ForgotView.vue'
 // 布局
 import LayoutView from '@/views/LayoutView.vue'
+
 
 
 
@@ -80,6 +83,12 @@ const router = createRouter({
           path:'/serve/withdraw',
           name:'withdraw',
           component:WithdrawView
+        },
+        {
+          // 转账
+          path:'/serve/transfer',
+          name:'transfer',
+          component:TransferView
         }
       ]
     },

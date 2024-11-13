@@ -60,7 +60,7 @@ const handleClose = (done) => {
           </div>
           <div class="main_left_text">
             <p v-if="PropsObj.ZDindex == '1'">
-              如果您需要申请贷款，请查看生源地贷款申请流程 贷款办理时间：
+              如果您需要申请贷款，请查看 贷款申请流程 贷款办理时间：
               必须在指定的时间内才能申请助学贷款，
               一般为每年6月-9月，具体以当地县区资助中心办理时间为准，请随时关注。
             </p>
@@ -81,7 +81,7 @@ const handleClose = (done) => {
           <div class="main_right_top">
             <a href="javaScript:;">本人所属资助中心联系方式</a>
           </div>
-
+          <!-- 资助中心联系方式 -->
           <div class="main_right_text">
             <a href="javaScript:;" v-if="PropsObj.Zindex == '2'" @click="PropsObj.Zindex = '1'">点击查看</a>
             <div class="main_right_pp" v-if="PropsObj.Zindex == '1'">
@@ -121,7 +121,7 @@ const handleClose = (done) => {
           </i>
           <div class="butt_item_right">
             <p>申请流程</p>
-            <span>生源地首贷的申请流程及所需材料</span>
+            <span> 首贷的申请流程及所需材料</span>
             <a href="javaScript:;" @click="
               PropsObj.IsShow = true;
             PropsObj.DK_DK_show = '1';
@@ -134,7 +134,7 @@ const handleClose = (done) => {
           </i>
           <div class="butt_item_right">
             <p>续贷帮助</p>
-            <span>生源地续贷的申请流程及所需材料</span>
+            <span> 续贷的申请流程及所需材料</span>
             <a href="javaScript:;" @click="
               PropsObj.IsShow = true;
             PropsObj.DK_DK_show = '2';
@@ -240,9 +240,9 @@ const handleClose = (done) => {
           <img src="../../../public/image/dk-liucheng.png" alt="" />
         </div>
         <div class="one1_text">
-          <p>生源地首贷的申请流程及所需材料:</p>
+          <p> 首贷的申请流程及所需材料:</p>
           <p>
-            1.注册学生在线服务系统:登录国家开发银行生源地助学贷款学生在线系统(https://sls.cdb.com.cn)，注册学生在线服务系统(生源地);"
+            1.注册学生在线服务系统:登录国家开发银行 助学贷款学生在线系统(https://sls.cdb.com.cn)，注册学生在线服务系统( );"
           </p>
 
           <p>
@@ -280,12 +280,12 @@ const handleClose = (done) => {
         <div class="one1_wen">
           <p>
             温馨提示：如学生的《学生证》原件遗失，可由高校开具的《学生在校证明》代替，县级资助中心留存《学生在校证明》原件。
-            学生可登录国家开发银行助学贷款信息网点击生源地学生在线服务系统左侧生源地助学贷款介绍中查看助学贷款范围
+            学生可登录国家开发银行助学贷款信息网点击 学生在线服务系统左侧 助学贷款介绍中查看助学贷款范围
           </p>
         </div>
       </div>
       <div class="one2" v-if="PropsObj.DK_DK_show == '2'">
-        <h1>生源地续贷的申请流程及所需材料</h1>
+        <h1> 续贷的申请流程及所需材料</h1>
 
         <div class="one2_img">
           <img src="../../../public/image/dk-help.png" alt="" />
@@ -314,7 +314,7 @@ const handleClose = (done) => {
 
           <h4>2.正常还款</h4>
           <p class="H_text_hei2">
-            生源地助学贷款：按照《借款合同》约定，借款学生从贴息截止日当年开始，宽限期内只偿还利息，宽限期后偿还部分本金和利息，每年需在11月1日-12月20日还款，最后一年以合同到期日为准还清贷款。系统提示的还款日期下月初登录系统查询还款记录。
+             助学贷款：按照《借款合同》约定，借款学生从贴息截止日当年开始，宽限期内只偿还利息，宽限期后偿还部分本金和利息，每年需在11月1日-12月20日还款，最后一年以合同到期日为准还清贷款。系统提示的还款日期下月初登录系统查询还款记录。
           </p>
 
           <p class="H_text_hei2">宽限期：2015年之前签订合同，宽限期为2年；</p>
@@ -389,6 +389,7 @@ const handleClose = (done) => {
       display: flex;
       justify-content: space-evenly;
       text-align: center;
+      padding: 20px 0;
 
       .main_item1 {
         width: 350px;
@@ -398,7 +399,7 @@ const handleClose = (done) => {
         flex-direction: column;
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-red.png");
-
+        border-radius: 10px;
         i {
           display: flex;
           justify-content: center;
@@ -407,12 +408,14 @@ const handleClose = (done) => {
         img {
           display: flex;
           justify-content: center;
-          width: 37.5px;
-          height: 37.5px;
+          width: 48px;
+          height: 48pxpx;
         }
 
         p {
-          margin-top: 6px;
+          margin-top: 17px;
+          color: white;
+          font-size: 21px;
         }
       }
 
@@ -424,7 +427,7 @@ const handleClose = (done) => {
         flex-direction: column;
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-yell.png");
-
+        border-radius: 10px;
         i {
           display: flex;
           justify-content: center;
@@ -433,9 +436,15 @@ const handleClose = (done) => {
         img {
           display: flex;
           justify-content: center;
-          width: 37.5px;
-          height: 37.5px;
+          width: 48px;
+          height: 48px;
         }
+        p{
+          font-size: 21px;
+          margin-top: 17px;
+          color: white;
+        }
+
       }
 
       .main_item3 {
@@ -446,7 +455,7 @@ const handleClose = (done) => {
         flex-direction: column;
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-green.png");
-
+        border-radius: 10px;
         i {
           display: flex;
           justify-content: center;
@@ -455,8 +464,13 @@ const handleClose = (done) => {
         img {
           display: flex;
           justify-content: center;
-          width: 37.5px;
-          height: 37.5px;
+          width: 48px;
+          height: 48px;
+        }
+        p{
+          font-size: 21px;
+          margin-top: 17px;
+          color: white;
         }
       }
 

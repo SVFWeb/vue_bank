@@ -1,12 +1,21 @@
 <script setup>
 import { reactive, ref,useTemplateRef} from 'vue';
 
+//借款仓库
+import { useLoanStore } from '@/stores/loan';
+//仓库实例
+const loanStore = useLoanStore();
+//弹出消息提示
+import { ElMessage } from 'element-plus'
+
 
 const Propsform = reactive({
    
     dialogFormVisible:false,//控制弹出层
     isShow:false, //隐私政策弹出层
     form:{ //表单数据
+        id:"u1",
+        contract:"",
         name:"",
         region:"",
         loanMoney:"", //借款金额
@@ -26,17 +35,17 @@ const rules = reactive({
   { required: true, message: '金额必填的', trigger: 'blur' },
   { min: 4, max: 5, message: '不得少于1千', trigger: 'blur' },
   ],
+  date:[
+  { required: true, message: '时间必填的', trigger: 'blur' },
+  ],
   phone:[
   { required: true, message: '电话必填的', trigger: 'blur' },
   { min: 11, max: 11, message: '不得少于11位', trigger: 'blur' },
   ],
   region: [
-    {
-      required: true,
-      message: 'Please select Activity zone',
-      trigger: 'change',
-    },
+  { required: true, message: '地址必填的', trigger: 'blur' },
   ],
+ 
 })
 
 //弹出层关闭
@@ -48,13 +57,44 @@ const form1 = ref();
 //点击申请按钮后回调
 const subim_form = async() =>{
     
-    console.log();
+   
     
-    //表单规则校验 
+    //表单规则校验 、、form1.value.validate 返回一个布尔值
    const result = await form1.value.validate(value =>{})
    //所有的表单符合规则之后为true并且勾选了用户协议之后就提交请求 
    if(result && Propsform.chenk){
+    //将表单中的数据包装对象携带发送请求
     console.log("表单数据",Propsform.form);
+
+    Propsform.dialogFormVisible = false
+    //发送请求
+   /*  loanStore.userAddLoandate(Propsform.form).then(re =>{
+
+        if (re =="200") {
+        
+        return    ElMessage({
+                message:"申请成功了",
+                type:"success"
+            })
+        }
+        return  ElMessage({
+                message:"申请成功了",
+                type:"success"
+        })
+    }) */
+
+    //数据为空
+    Propsform.form.name = "";
+    Propsform.form.contract = "";
+    Propsform.form.date = "";
+    Propsform.form.loanMoney = "";
+    Propsform.form.phone = "";
+    Propsform.chenk = false
+    Propsform.form.region = ""
+
+
+   
+
    }
 
     
@@ -65,7 +105,7 @@ const subim_form = async() =>{
 <template>
 <div class="top">
     <div class="main_top">
-       
+       <!-- 头部列表 -->
         <div class="main_top_list">
 
             <div class="main_top_list_item">
@@ -143,7 +183,7 @@ const subim_form = async() =>{
                 </div>
             </div>
         </div>
-        <div class="main_item">
+        <div class="main_item" @click="Propsform.dialogFormVisible = true">
             <div class="main_item_top">
                 微捷贷
             </div>
@@ -171,7 +211,7 @@ const subim_form = async() =>{
                 </div>
             </div>
         </div>
-        <div class="main_item">
+        <div class="main_item" @click="Propsform.dialogFormVisible = true">
             <div class="main_item_top">
                 闪信贷
             </div>
@@ -199,7 +239,12 @@ const subim_form = async() =>{
                 </div>
             </div>
         </div>
+<<<<<<< Updated upstream
         <div class="main_item">
+=======
+
+        <div class="main_item" @click="Propsform.dialogFormVisible = true">
+>>>>>>> Stashed changes
             <div class="main_item_top">
                 科技贷
             </div>
@@ -245,6 +290,15 @@ const subim_form = async() =>{
     :validate="subim_form"
     >
       <div class="main_form_item">
+        <el-form-item  prop="contract">
+        <el-select v-model="Propsform.form.contract" placeholder="贷款名称">
+          <el-option label="个人贷" value="个人贷" />
+          <el-option label="微捷贷" value="微捷贷" />
+          <el-option label="闪信贷" value="闪信贷" />
+          <el-option label="科技贷" value="科技贷" />
+          
+        </el-select>
+      </el-form-item>
         <el-form-item   prop="name">
         <el-input v-model="Propsform.form.name"  placeholder="请输入姓名" />
       </el-form-item>
@@ -348,9 +402,7 @@ const subim_form = async() =>{
                 font-size: 18px;
                 font-weight: bold;
             }
-            & .list_item_right p:nth-child(4){
-               
-            }
+          
         }
        
 

@@ -1,4 +1,17 @@
 <script setup>
+import { ref, onMounted} from 'vue';
+import { storeToRefs } from 'pinia';
+import { useLoanStore } from '@/stores/loan';
+
+const loanStore = useLoanStore();
+//对仓库进行解构
+const {conList} = storeToRefs(loanStore)
+//测试数据
+onMounted(() =>{
+    //获取合同列表
+   // loanStore.UserConList("u1")
+  
+})
 
 </script>
 
@@ -6,44 +19,26 @@
     <div class="loan_top">
         <div class="loan_main">
             <h1>我的贷款记录</h1>
-            <div class="loan_one_log">
+            <div class="loan_one_log" v-for="item,index in conList" :key="index">
                 <div class="loan_one_text">
-                    <p>用户名：</p>
-                    <p class="DK_suss">贷款已完成</p>
+                    <!-- <p>用户名：{{ item.cid }}</p> -->
+                    <p class="DK_suss">贷款已完成:{{ item.cName }}</p>
                     <p>
-                        <span>贷款时间：2024-11-08</span>
+                        <span>贷款时间：{{ item.cTime }}</span>
                        
                         
                     </p>
                     <p>
                         <span>贷款名称：科技贷</span>
                         <span class="line_sp">|</span>
-                        <span>贷款金额：<span>￥9000（元）</span></span>
+                        <span>贷款金额：<span style="color: orange;">￥{{item.cLoanAmount}}（元）</span></span>
                     </p>
                 </div>
                 <div class="loan_one_bd">
 
                 </div>
             </div>
-            <div class="loan_one_log">
-                <div class="loan_one_text">
-                    <p>用户名：</p>
-                    <p class="DK_suss">贷款已完成</p>
-                    <p>
-                        <span>贷款时间：2024-11-08</span>
-                       
-                        
-                    </p>
-                    <p>
-                        <span>贷款名称：科技贷</span>
-                        <span class="line_sp">|</span>
-                        <span>贷款金额：<span>￥9000（元）</span></span>
-                    </p>
-                </div>
-                <div class="loan_one_bd">
-
-                </div>
-            </div>
+           
         </div>
     </div>
 </template>

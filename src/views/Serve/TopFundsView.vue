@@ -22,7 +22,7 @@
 
             <el-divider style="margin: 0;" />
 
-            <div class="topfunds_tabs">
+            <div v-loading="loading" class="topfunds_tabs">
                 <el-tabs v-model="activeName" style="border: none;" type="border-card">
                     <el-tab-pane label="储蓄卡" name="bankCard">
                         <div class="topfunds_bank_card">
@@ -65,28 +65,89 @@
                             </el-radio-group>
                         </div>
                         <el-divider />
+                        <div class="form">
+                            <el-form :model="form" label-width="auto" style="max-width: 200px" :rules="rules"
+                                ref="ruleFormRef">
+                                <el-form-item prop="funds" label="充值金额：">
+                                    <el-input v-model="form.funds" />
+                                </el-form-item>
+                                <el-form-item prop="password" label="支付密码：">
+                                    <el-input v-model="form.password" />
+                                </el-form-item>
+                            </el-form>
+                        </div>
                         <div class="btn">
-                            <el-button type="primary">下一步</el-button>
+                            <el-button type="primary" @click="submitForm(ruleFormRef)">确认充值</el-button>
                         </div>
                     </el-tab-pane>
-
-                    <el-tab-pane label="充值码" name="topCode">
-
-                    </el-tab-pane>
-
                 </el-tabs>
             </div>
-
         </div>
+
+        <el-dialog v-model="dialogVisible" title="请确认充值" width="500" :before-close="handleClose">
+            <span>充值余额为：{{ form.funds }} 元</span>
+
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="againTopFunds">
+                        确认
+                    </el-button>
+                </div>
+            </template>
+        </el-dialog>
+
     </div>
 </template>
 
 <script setup>
 import { SuccessFilled } from '@element-plus/icons-vue'
+import { reactive, ref } from 'vue';
 
-import { ref } from 'vue';
 const activeName = ref('bankCard')
 const radio1 = ref('1')
+const dialogVisible = ref(false)
+const ruleFormRef = ref()
+// 加载
+const loading = ref(false)
+
+const form = reactive({
+    funds: '',
+    password: ''
+})
+
+const rules = reactive({
+    funds: [{ required: true, message: '请输入正确的金额', trigger: 'change' },],
+    password: [{ required: true, message: '支付密码不能为空', trigger: 'change' },]
+})
+
+const handleClose = (done) => {
+    ElMessageBox.confirm('确定放弃充值余额吗？')
+        .then(() => {
+            done()
+        })
+}
+
+// 表单校验
+const submitForm = async (formEl) => {
+    if (!formEl) return
+    await formEl.validate((valid, fields) => {
+        if (valid) {
+            dialogVisible.value = true
+        }
+    })
+}
+
+//再次确认充值
+function againTopFunds() {
+    dialogVisible.value = false
+    // 请求接口
+    loading.value = true
+    setTimeout(() => {
+        loading.value = false
+    }, 2000)
+    //显示充值成功的提示
+}
+
 
 </script>
 

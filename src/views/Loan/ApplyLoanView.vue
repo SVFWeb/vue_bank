@@ -155,117 +155,119 @@ const subim_form = async () => {
 
             </div>
 
-            <div class="main_item" @click="Propsform.dialogFormVisible = true">
-                <div class="main_item_top">
-                    个人贷
+        <div class="main_item" @click="Propsform.dialogFormVisible = true">
+            <div class="main_item_top">
+                个人贷
+            </div>
+            <div class="main_item_banner">
+                大额资金首选，条件限制宽松，通过率高，利息低
+            </div>
+            <div class="main_item_center">
+                主要形式：
+                <span>个人信息</span>|
+                <span>个人</span>
+            </div>
+            <hr>
+            <div class="main_item_butt">
+                <div class="main_item_butt_text">
+                    <p class="text_col">1~2万</p>
+                    <p class="butt_text_fon">可贷额度</p>
                 </div>
-                <div class="main_item_banner">
-                    大额资金首选，条件限制宽松，通过率高，利息低
+                <div class="main_item_butt_text">
+                    <p>3%~16.8%</p>
+                    <p class="butt_text_fon">年化利率</p>
                 </div>
-                <div class="main_item_center">
-                    主要形式：
-                    <span>个人信息</span>|
-                    <span>个人</span>
-                </div>
-                <hr>
-                <div class="main_item_butt">
-                    <div class="main_item_butt_text">
-                        <p class="text_col">1~2万</p>
-                        <p class="butt_text_fon">可贷额度</p>
-                    </div>
-                    <div class="main_item_butt_text">
-                        <p>3%~16.8%</p>
-                        <p class="butt_text_fon">年化利率</p>
-                    </div>
-                    <div class="main_item_butt_text">
-                        <p>1~20年</p>
-                        <p class="butt_text_fon">还款期限</p>
-                    </div>
+                <div class="main_item_butt_text">
+                    <p>1~20年</p>
+                    <p class="butt_text_fon">还款期限</p>
                 </div>
             </div>
-            <div class="main_item" @click="Propsform.dialogFormVisible = true">
-                <div class="main_item_top">
-                    微捷贷
+        </div>
+        <div class="main_item" @click="Propsform.dialogFormVisible = true">
+            <div class="main_item_top">
+                微捷贷
+            </div>
+            <div class="main_item_banner">
+                大额资金首选，条件限制宽松，通过率高，利息低
+            </div>
+            <div class="main_item_center">
+                主要形式：
+                <span>征信</span>|
+                <span>信息</span>
+            </div>
+            <hr>
+            <div class="main_item_butt">
+                <div class="main_item_butt_text">
+                    <p class="text_col">2~3万</p>
+                    <p class="butt_text_fon">可贷额度</p>
                 </div>
-                <div class="main_item_banner">
-                    大额资金首选，条件限制宽松，通过率高，利息低
+                <div class="main_item_butt_text">
+                    <p>3.5</p>
+                    <p class="butt_text_fon">年化利率</p>
                 </div>
-                <div class="main_item_center">
-                    主要形式：
-                    <span>征信</span>|
-                    <span>信息</span>
-                </div>
-                <hr>
-                <div class="main_item_butt">
-                    <div class="main_item_butt_text">
-                        <p class="text_col">2~3万</p>
-                        <p class="butt_text_fon">可贷额度</p>
-                    </div>
-                    <div class="main_item_butt_text">
-                        <p>3.5</p>
-                        <p class="butt_text_fon">年化利率</p>
-                    </div>
-                    <div class="main_item_butt_text">
-                        <p>1~20年</p>
-                        <p class="butt_text_fon">还款期限</p>
-                    </div>
+                <div class="main_item_butt_text">
+                    <p>1~20年</p>
+                    <p class="butt_text_fon">还款期限</p>
                 </div>
             </div>
-            <div class="main_item" @click="Propsform.dialogFormVisible = true">
-                <div class="main_item_top">
-                    闪信贷
+        </div>
+        <div class="main_item" @click="Propsform.dialogFormVisible = true">
+            <div class="main_item_top">
+                闪信贷
+            </div>
+            <div class="main_item_banner">
+                大额资金首选，条件限制宽松，通过率高，利息低
+            </div>
+            <div class="main_item_center">
+                主要形式：
+                <span>经营</span>|
+                <span>发票</span>
+            </div>
+            <hr>
+            <div class="main_item_butt">
+                <div class="main_item_butt_text">
+                    <p class="text_col">3~4万</p>
+                    <p class="butt_text_fon">可贷额度</p>
                 </div>
-                <div class="main_item_banner">
-                    大额资金首选，条件限制宽松，通过率高，利息低
+                <div class="main_item_butt_text">
+                    <p>3%~16.8%</p>
+                    <p class="butt_text_fon">年化利率</p>
                 </div>
-                <div class="main_item_center">
-                    主要形式：
-                    <span>经营</span>|
-                    <span>发票</span>
-                </div>
-                <hr>
-                <div class="main_item_butt">
-                    <div class="main_item_butt_text">
-                        <p class="text_col">3~4万</p>
-                        <p class="butt_text_fon">可贷额度</p>
-                    </div>
-                    <div class="main_item_butt_text">
-                        <p>3%~16.8%</p>
-                        <p class="butt_text_fon">年化利率</p>
-                    </div>
-                    <div class="main_item_butt_text">
-                        <p>1~20年</p>
-                        <p class="butt_text_fon">还款期限</p>
-                    </div>
+                <div class="main_item_butt_text">
+                    <p>1~20年</p>
+                    <p class="butt_text_fon">还款期限</p>
                 </div>
             </div>
-            <div class="main_item" @click="Propsform.dialogFormVisible = true">
-                <div class="main_item_top">
-                    科技贷
+        </div>
+
+        <div class="main_item" @click="Propsform.dialogFormVisible = true">
+            <div class="main_item_top">
+                科技贷
+            </div>
+            <div class="main_item_banner">
+                大额资金首选，条件限制宽松，通过率高，利息低
+            </div>
+            <div class="main_item_center">
+                主要形式：
+                <span>融资</span>|
+                <span>技术</span>
+            </div>
+            <hr>
+            <div class="main_item_butt">
+                <div class="main_item_butt_text">
+                    <p class="text_col">4~5万</p>
+                    <p class="butt_text_fon">可贷额度</p>
                 </div>
-                <div class="main_item_banner">
-                    大额资金首选，条件限制宽松，通过率高，利息低
+                <div class="main_item_butt_text">
+                    <p>3%~16.8%</p>
+                    <p class="butt_text_fon">年化利率</p>
                 </div>
-                <div class="main_item_center">
-                    主要形式：
-                    <span>融资</span>|
-                    <span>技术</span>
+                <div class="main_item_butt_text">
+                    <p>1~20年</p>
+                    <p class="butt_text_fon">还款期限</p>
                 </div>
-                <hr>
-                <div class="main_item_butt">
-                    <div class="main_item_butt_text">
-                        <p class="text_col">4~5万</p>
-                        <p class="butt_text_fon">可贷额度</p>
-                    </div>
-                    <div class="main_item_butt_text">
-                        <p>3%~16.8%</p>
-                        <p class="butt_text_fon">年化利率</p>
-                    </div>
-                    <div class="main_item_butt_text">
-                        <p>1~20年</p>
-                        <p class="butt_text_fon">还款期限</p>
-                    </div>
-                </div>
+            </div>
+        </div>
 
             </div>
 
@@ -341,8 +343,9 @@ const subim_form = async () => {
 
             </el-dialog>
 
-        </div>
-    </div>
+</div>
+
+  
 </template>
 
 <style lang="less" scoped>
@@ -362,6 +365,13 @@ const subim_form = async () => {
         margin-bottom: 40px;
 
         .main_top_list_item {
+      
+       display: flex;
+       justify-content: space-around;
+       background-color: white;
+       padding: 30px 0;
+       margin-bottom: 40px;
+        .main_top_list_item{
 
             width: 280px;
             height: 52px;
@@ -475,7 +485,7 @@ const subim_form = async () => {
         }
     }
 }
-
+}
 .user_xieyi,
 .user_yinsi {
     text-align: center;

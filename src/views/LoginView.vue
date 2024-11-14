@@ -25,15 +25,18 @@
             <!-- 登录表单 -->
             <el-form :model="form" :rules="rules" ref="ruleFormRef">
               <el-form-item prop="username">
-                <el-input size="large" placeholder="用户名/卡号/手机号" v-model="form.username" :prefix-icon="User" />
+                <el-input size="large" placeholder="请输入手机号" v-model="form.username" :prefix-icon="User" />
               </el-form-item>
               <el-form-item prop="password">
-                <el-input size="large" show-password placeholder="请输入登录密码" v-model="form.password" :prefix-icon="Lock" />
+                <el-input size="large" show-password placeholder="请输入登录密码" v-model="form.password"
+                  :prefix-icon="Lock" />
               </el-form-item>
               <el-form-item prop="code" class="captcha_form_item">
                 <el-input size="large" placeholder="验证码" v-model="form.code" :prefix-icon="Edit" />
                 <!-- 验证码 -->
-                <div class="captcha"><Captcha @get-captcha-text="getCaptchaText"/></div>
+                <div class="captcha">
+                  <Captcha @get-captcha-text="getCaptchaText" />
+                </div>
               </el-form-item>
               <el-form-item>
                 <el-button style="width: 100%" @click="submitForm(ruleFormRef)" type="primary">登录</el-button>
@@ -107,58 +110,63 @@ import { User, Lock, Edit } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router';
 
+import { useUserStore } from '@/stores/useUserStore';
+
 // 正确的验证码
-let code=ref('')
+let code = ref('')
 // 当前表单对象
-const ruleFormRef=ref()
-const router=useRouter()
+const ruleFormRef = ref()
+const router = useRouter()
+
+//用户仓库
+const store = useUserStore()
+
 
 const form = reactive({
-  username: '',
-  password: '',
+  username: '15222222222',
+  password: 'nbnb1234',
   code: '',
 })
 
 const rules = reactive({
-  username: [{ required: true, message: '请输入正确的卡号或手机号', trigger: 'change' }],
+  username: [{ required: true, message: '请输入正确手机号', trigger: 'change' }],
   password: [{ required: true, message: '登录密码不能为空', trigger: 'change' }],
   code: [{ required: true, message: '请输入正确的验证码', trigger: 'change' }, { validator: validateCode, trigger: 'change' }],
 })
 
 // 获取到验证码组件正确的验证码
-function getCaptchaText(value){
-  code.value=value
+function getCaptchaText(value) {
+  code.value = value
 }
 
 // 验证码校验函数
-function validateCode(rules,value,callback){
-  if(value!==code.value){
+function validateCode(rules, value, callback) {
+  if (value !== code.value) {
     callback(new Error('验证码错误'))
-  }else{
+  } else {
     callback()
   }
 }
 
+
 // 提交表单
 async function submitForm(formEl) {
- if(!formEl) return 
- await formEl.validate((valid)=>{
-  if(valid){
-    // 表单验证规则通过
-    // 在此发起请求......
-    router.push('/home')
-      ElMessage({
-        message: '成功登录',
-        type: 'success',
+  if (!formEl) return
+  await formEl.validate((valid) => {
+    if (valid) {
+      // 表单验证规则通过
+      store.getUserLogin({
+        uPhone: form.username,
+        uAccountPassword: form.password
       })
-  }
- })
+    }
+  })
 }
 </script>
 
 <style lang="less" scoped>
 .login {
-  
+
   .login_container {
     max-width: 1280px;
     margin: 0 auto;
@@ -168,6 +176,7 @@ async function submitForm(formEl) {
       align-items: center;
       width: 922px;
       height: 81px;
+
       .logo {
         width: 198px;
         height: 40px;
@@ -223,6 +232,7 @@ async function submitForm(formEl) {
 
           .captcha_form_item {
             position: relative;
+
             .captcha {
               height: 38px;
               position: absolute;
@@ -279,15 +289,19 @@ async function submitForm(formEl) {
           .item_1 {
             background-position: -18px 1039px;
           }
+
           .item_2 {
             background-position: -121px 1039px;
           }
+
           .item_3 {
             background-position: -326px 1039px;
           }
+
           .item_4 {
             background-position: -428px 1039px;
           }
+
           .item_5 {
             background-position: -531px 1039px;
           }
@@ -344,7 +358,7 @@ async function submitForm(formEl) {
       }
     }
 
-    .footer{
+    .footer {
       width: 100%;
       height: 30px;
     }

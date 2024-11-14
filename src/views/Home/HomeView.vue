@@ -24,7 +24,9 @@
         </div>
 
         <div class="bottom">
-          <el-icon class="icon"><Coin /></el-icon>
+          <el-icon class="icon">
+            <Coin />
+          </el-icon>
           <span class="text">我的余额</span>
           <span class="num">0</span>
           <div class="manage">去管理</div>
@@ -46,7 +48,7 @@
           </ul>
 
           <ul class="info_text">
-            <li>法外狂徒张三</li>
+            <li> 法外狂徒张三 </li>
             <li>23845234698324</li>
             <li>男</li>
             <li>18</li>
@@ -60,7 +62,18 @@
 </template>
 
 <script setup>
-import { Coin,UserFilled } from '@element-plus/icons-vue'
+import { Coin, UserFilled } from '@element-plus/icons-vue'
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/stores/useUserStore';
+
+const store = useUserStore()
+const { userInfo } = storeToRefs(store)
+
+console.log(userInfo);
+
+
+
+
 </script>
 
 <style lang="less" scoped>
@@ -198,8 +211,10 @@ import { Coin,UserFilled } from '@element-plus/icons-vue'
       .form {
         display: flex;
         padding-left: 15px;
+
         ul {
           margin-right: 40px;
+
           li {
             margin-top: 40px;
             color: #555666;

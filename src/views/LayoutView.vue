@@ -3,7 +3,7 @@
     <div class="layout_container">
       <!-- 顶部 -->
       <div class="layout_tabber">
-        <Tabber/>
+        <Tabber />
       </div>
 
       <!-- 菜单 -->
@@ -13,7 +13,7 @@
 
       <!-- 内容 -->
       <div class="layout_main">
-        <RouterView/>
+        <RouterView />
       </div>
     </div>
   </div>
@@ -22,6 +22,20 @@
 <script setup>
 import Menu from '@/components/Menu.vue'
 import Tabber from '@/components/Tabber.vue';
+import { useUserStore } from '@/stores/useUserStore';
+import { onMounted } from 'vue';
+
+const store = useUserStore()
+const { getUserInfo } = store
+
+onMounted(() => {
+  getUserInfo({
+    uid: localStorage.getItem('token')
+  })
+})
+
+
+
 </script>
 
 <style lang="less" scoped>

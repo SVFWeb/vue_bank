@@ -4,7 +4,7 @@ import "nprogress/nprogress.css"
 
 //二次axios
 const request = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://127.0.0.1:8080',
     timeout: 3000,
     //headers: {'X-Custom-Header': 'foobar'},//带一个头
   });

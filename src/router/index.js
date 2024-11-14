@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
 // ----账户管理
 // 个人信息
@@ -68,27 +69,27 @@ const router = createRouter({
     },
     // 资金服务
     {
-      path:'/serve',
-      redirect:'',
-      component:LayoutView,
-      children:[
+      path: '/serve',
+      redirect: '',
+      component: LayoutView,
+      children: [
         {
           //充值
-          path:'/serve/topfunds',
-          name:'topfunds',
-          component:TopFundsView,
+          path: '/serve/topfunds',
+          name: 'topfunds',
+          component: TopFundsView,
         },
         {
           // 提现
-          path:'/serve/withdraw',
-          name:'withdraw',
-          component:WithdrawView
+          path: '/serve/withdraw',
+          name: 'withdraw',
+          component: WithdrawView
         },
         {
           // 转账
-          path:'/serve/transfer',
-          name:'transfer',
-          component:TransferView
+          path: '/serve/transfer',
+          name: 'transfer',
+          component: TransferView
         }
       ]
     },
@@ -140,6 +141,17 @@ const router = createRouter({
       component: ForgotView
     }
   ]
+})
+
+router.beforeEach((to, from) => {
+  const token = localStorage.getItem('token')
+  if (!token && to.name !== 'login') {
+    ElMessage({
+      message: '请先登录用户',
+      type: 'warning',
+    })
+    return ({ path: '/login' })
+  }
 })
 
 export default router

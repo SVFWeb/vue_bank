@@ -1,9 +1,7 @@
-//用户api
 import request from "@/util/request"
 
-export function getUser(){
-    return request({
-        url:"/getUserList",
-        method:"get"
-    })
-}
+//登录
+export const reqLogin = (data) => request.post('/user/login', data)
+
+//获取用户信息
+export const reqUserInfo=(data)=>request.post('/user/userinfo',data)

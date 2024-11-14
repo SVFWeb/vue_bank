@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive,ref } from "vue";
 
 let PropsObj = reactive({
   IsShow: false,
@@ -10,6 +10,25 @@ let PropsObj = reactive({
   ZDindex: "1", //控制贷款提醒文本
   DK_DK_show: "0",
 });
+
+let h_list = ref([
+  {
+    id:"1",
+    name:"科技贷",
+    conSal:3000,
+  },
+  {
+    id:"2",
+    name:"科技贷",
+    conSal:3000,
+  },
+  {
+    id:"3",
+    name:"科技贷",
+    conSal:4000,
+  },
+
+])
 
 //全部的复选框都为选中
 const subit_chenck = () => {
@@ -175,6 +194,7 @@ const handleClose = (done) => {
       <div class="huan_top">
         <div class="quan_butt">
           <el-button type="success" @click="subit_chenck">全部结清</el-button>
+          <p>总款：3000</p>
         </div>
         <div class="huan_top_flex">
           <p>2023-2024学年合同</p>

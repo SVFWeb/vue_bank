@@ -19,17 +19,20 @@ onMounted(() =>{
     <div class="loan_top">
         <div class="loan_main">
             <h1>我的贷款记录</h1>
-            <div class="loan_one_log" v-for="item,index in conList" :key="index">
+            <!-- v-for="item,index in conList" :key="index" -->
+            <div class="loan_one_log" >
                 <div class="loan_one_text">
                     <!-- <p>用户名：{{ item.cid }}</p> -->
-                    <p class="DK_suss">贷款已完成:{{ item.cName }}</p>
+                    <p class="DK_suss">贷款已完成:</p>
                     <p>
-                        <span>贷款时间：{{ item.cTime }}</span>
+                        <!-- {{ item.cTime }} -->
+                        <span>贷款时间：</span>
                     </p>
                     <p>
                         <span>贷款名称：科技贷</span>
                         <span class="line_sp">|</span>
-                        <span>贷款金额：<span style="color: orange;">￥{{item.cLoanAmount}}（元）</span></span>
+                        <!-- {{item.cLoanAmount}} -->
+                        <span>贷款金额：<span style="color: orange;">￥（元）</span></span>
                     </p>
                 </div>
                 <div class="loan_one_bd">

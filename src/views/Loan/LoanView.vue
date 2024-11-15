@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed } from "vue";
+import { reactive, ref } from "vue";
 
 let PropsObj = reactive({
   IsShow: false,
@@ -15,14 +15,14 @@ let PropsObj = reactive({
 //合同测试数据
 let h_list = ref([
   {
-    id: "1",
-    name: "科技贷",
-    conSal: 3000,
+    id:  "1",
+    name:  "科技贷",
+    conSal:  3000,
   },
   {
     id: "2",
     name: "科技贷",
-    conSal: 6000,
+    conSal: 3000,
   },
   {
     id: "3",
@@ -520,7 +520,7 @@ const handleClose = (done) => {
 <style scoped lang="less">
 .top {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: #f4f5f6;
 
   .gu_main {
@@ -544,6 +544,7 @@ const handleClose = (done) => {
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-red.png");
         border-radius: 10px;
+
         i {
           display: flex;
           justify-content: center;
@@ -572,6 +573,7 @@ const handleClose = (done) => {
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-yell.png");
         border-radius: 10px;
+
         i {
           display: flex;
           justify-content: center;
@@ -583,7 +585,7 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
-        p {
+        p{
           font-size: 21px;
           margin-top: 17px;
           color: white;
@@ -599,6 +601,7 @@ const handleClose = (done) => {
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-green.png");
         border-radius: 10px;
+
         i {
           display: flex;
           justify-content: center;
@@ -610,7 +613,7 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
-        p {
+        p{
           font-size: 21px;
           margin-top: 17px;
           color: white;

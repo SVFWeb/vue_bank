@@ -8,7 +8,7 @@
 
           <div class="top_info">
             <div class="info_usrname">
-              <span>法外狂徒张三</span>
+              <span>{{ userInfo?.username }}</span>
             </div>
 
             <div class="info_medal">
@@ -28,8 +28,8 @@
             <Coin />
           </el-icon>
           <span class="text">我的余额</span>
-          <span class="num">0</span>
-          <div class="manage">去管理</div>
+          <span class="num">{{ userInfo.balance }}</span>
+          <div class="manage" @click="router.push('/wealth')">去管理</div>
         </div>
       </div>
 
@@ -41,18 +41,18 @@
         <div class="form">
           <ul class="info_table">
             <li>用户昵称</li>
-            <li>用户uid</li>
+            <li>用户账户</li>
             <li>用户性别</li>
             <li>用户年龄</li>
             <li>用户民族</li>
           </ul>
 
           <ul class="info_text">
-            <li> 法外狂徒张三 </li>
-            <li>23845234698324</li>
-            <li>男</li>
-            <li>18</li>
-            <li>汉</li>
+            <li> {{ userInfo?.username }} </li>
+            <li>{{ userInfo.id }}</li>
+            <li>{{ userInfo.sex === 1 ? '男' : '女' }}</li>
+            <li>{{ userInfo.age }}</li>
+            <li>{{ userInfo.ethnicGroup }}</li>
           </ul>
 
         </div>
@@ -65,14 +65,10 @@
 import { Coin, UserFilled } from '@element-plus/icons-vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/useUserStore';
+import router from '@/router';
 
 const store = useUserStore()
 const { userInfo } = storeToRefs(store)
-
-console.log(userInfo);
-
-
-
 
 </script>
 

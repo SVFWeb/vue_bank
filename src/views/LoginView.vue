@@ -109,7 +109,6 @@ import Captcha from '@/components/Captcha.vue'
 import { User, Lock, Edit } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router';
-
 import { useUserStore } from '@/stores/useUserStore';
 
 // 正确的验证码
@@ -120,6 +119,7 @@ const router = useRouter()
 
 //用户仓库
 const store = useUserStore()
+const { getUserLogin } = store
 
 
 const form = reactive({
@@ -131,7 +131,7 @@ const form = reactive({
 const rules = reactive({
   username: [{ required: true, message: '请输入正确手机号', trigger: 'change' }],
   password: [{ required: true, message: '登录密码不能为空', trigger: 'change' }],
-  code: [{ required: true, message: '请输入正确的验证码', trigger: 'change' }, { validator: validateCode, trigger: 'change' }],
+  code: [{ required: true, validator: validateCode, trigger: 'change' }],
 })
 
 // 获取到验证码组件正确的验证码
@@ -148,14 +148,13 @@ function validateCode(rules, value, callback) {
   }
 }
 
-
 // 提交表单
 async function submitForm(formEl) {
   if (!formEl) return
   await formEl.validate((valid) => {
     if (valid) {
       // 表单验证规则通过
-      store.getUserLogin({
+      getUserLogin({
         uPhone: form.username,
         uAccountPassword: form.password
       })

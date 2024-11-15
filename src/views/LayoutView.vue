@@ -15,6 +15,7 @@
       <div class="layout_main">
         <RouterView />
       </div>
+      
     </div>
   </div>
 </template>
@@ -23,7 +24,7 @@
 import Menu from '@/components/Menu.vue'
 import Tabber from '@/components/Tabber.vue';
 import { useUserStore } from '@/stores/useUserStore';
-import { onMounted } from 'vue';
+import { onMounted } from 'vue'
 
 const store = useUserStore()
 const { getUserInfo } = store

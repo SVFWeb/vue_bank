@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div class="right">
-                    <span>0.00</span>
+                    <span>{{ userInfo.balance }}</span>
                     元
                 </div>
             </div>
@@ -72,7 +72,7 @@
                                     <el-input v-model="form.funds" />
                                 </el-form-item>
                                 <el-form-item prop="password" label="支付密码：">
-                                    <el-input v-model="form.password" />
+                                    <el-input show-password v-model="form.password" />
                                 </el-form-item>
                             </el-form>
                         </div>
@@ -82,6 +82,7 @@
                     </el-tab-pane>
                 </el-tabs>
             </div>
+
         </div>
 
         <el-dialog v-model="dialogVisible" title="请确认充值" width="500" :before-close="handleClose">
@@ -100,9 +101,15 @@
 </template>
 
 <script setup>
+import { useUserStore } from '@/stores/useUserStore';
 import { SuccessFilled } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { storeToRefs } from 'pinia';
 import { reactive, ref } from 'vue';
 
+const store = useUserStore()
+const { balanceUser, getUserInfo } = store
+const { userInfo } = storeToRefs(store)
 const activeName = ref('bankCard')
 const radio1 = ref('1')
 const dialogVisible = ref(false)
@@ -117,7 +124,10 @@ const form = reactive({
 
 const rules = reactive({
     funds: [{ required: true, message: '请输入正确的金额', trigger: 'change' },],
-    password: [{ required: true, message: '支付密码不能为空', trigger: 'change' },]
+    password: [
+        { required: true, message: '支付密码不能为空', trigger: 'change' },
+        { validator: validatePassword, trigger: 'change' }
+    ]
 })
 
 const handleClose = (done) => {
@@ -125,6 +135,15 @@ const handleClose = (done) => {
         .then(() => {
             done()
         })
+}
+
+// 支付密码校验
+function validatePassword(rules, value, callback) {
+    if (value != userInfo.value.paymentPassword) {
+        callback(new Error('支付密码错误'))
+    } else {
+        callback()
+    }
 }
 
 // 表单校验
@@ -140,12 +159,24 @@ const submitForm = async (formEl) => {
 //再次确认充值
 function againTopFunds() {
     dialogVisible.value = false
-    // 请求接口
     loading.value = true
+    balanceUser({
+        uid: userInfo.value.id,
+        uBalance: form.funds
+    }).then(() => {
+        getUserInfo({
+            uid: userInfo.value.id
+        })
+    })
     setTimeout(() => {
+        // 消息提示
+        ElMessage({
+            message: '已成功充值到用户账户上',
+            type: 'success',
+        })
         loading.value = false
-    }, 2000)
-    //显示充值成功的提示
+        ruleFormRef.value.resetFields()
+    }, 500)
 }
 
 

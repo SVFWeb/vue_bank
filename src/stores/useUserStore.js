@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { reqLogin, reqUserInfo, reqRegisterUser, reqForgotUser } from '@/api/user'
+import { reqLogin, reqUserInfo, reqRegisterUser, reqForgotUser, reqBalanceUser } from '@/api/user'
 import { useRouter } from 'vue-router';
 
 export const useUserStore = defineStore('user', () => {
@@ -85,8 +85,12 @@ export const useUserStore = defineStore('user', () => {
         type: 'success',
       })
     }
-
   }
 
-  return { userInfo, getUserLogin, getUserInfo, registerUser, forgotUser }
+  // 修改用户金额
+  async function balanceUser(data) {
+    await reqBalanceUser(data)
+  }
+
+  return { userInfo, getUserLogin, getUserInfo, registerUser, forgotUser, balanceUser }
 })

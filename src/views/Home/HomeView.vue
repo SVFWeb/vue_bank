@@ -29,7 +29,7 @@
           </el-icon>
           <span class="text">我的余额</span>
           <span class="num">{{ userInfo.balance }}</span>
-          <div class="manage">去管理</div>
+          <div class="manage" @click="router.push('/wealth')">去管理</div>
         </div>
       </div>
 
@@ -50,9 +50,9 @@
           <ul class="info_text">
             <li> {{ userInfo?.username }} </li>
             <li>{{ userInfo.id }}</li>
-            <li>{{  userInfo.sex===1?'男':'女'  }}</li>
-            <li>{{ userInfo.age  }}</li>
-            <li>{{  userInfo.ethnicGroup }}</li>
+            <li>{{ userInfo.sex === 1 ? '男' : '女' }}</li>
+            <li>{{ userInfo.age }}</li>
+            <li>{{ userInfo.ethnicGroup }}</li>
           </ul>
 
         </div>
@@ -65,6 +65,7 @@
 import { Coin, UserFilled } from '@element-plus/icons-vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/useUserStore';
+import router from '@/router';
 
 const store = useUserStore()
 const { userInfo } = storeToRefs(store)

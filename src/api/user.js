@@ -11,3 +11,6 @@ export const reqRegisterUser = (data) => request.post('/user/register', data)
 
 // 修改用户密码
 export const reqForgotUser = (data) => request.post('/user/update/password', data)
+
+// 修改用户金额
+export const reqBalanceUser = (data) => request.put('/user/update/balance', data)

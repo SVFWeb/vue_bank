@@ -15,6 +15,7 @@
       <div class="layout_main">
         <RouterView />
       </div>
+      
     </div>
   </div>
 </template>

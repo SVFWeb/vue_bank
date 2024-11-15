@@ -20,7 +20,7 @@
                   </div>
 
                   <div class="number">
-                    <span>0.00</span>
+                    <span>{{ userInfo.balance }}</span>
                   </div>
                 </div>
                 <div class="datail_item">
@@ -29,15 +29,15 @@
                   </div>
 
                   <div class="number">
-                    <span>0.00</span>
+                    <span>{{ userInfo.liability }}</span>
                   </div>
                 </div>
               </div>
 
               <div class="controls">
-                <el-button plain>转账</el-button>
-                <el-button plain>充值</el-button>
-                <el-button plain>提现</el-button>
+                <el-button @click="router.push('/serve/transfer')" plain>转账</el-button>
+                <el-button @click="router.push('/serve/topfunds')" plain>充值</el-button>
+                <el-button @click="router.push('/serve/withdraw')" plain>提现</el-button>
               </div>
             </div>
           </div>
@@ -64,6 +64,12 @@
 </template>
 
 <script setup>
+import router from '@/router';
+import { useUserStore } from '@/stores/useUserStore';
+import { storeToRefs } from 'pinia';
+
+const store = useUserStore()
+const { userInfo } = storeToRefs(store)
 const tableData = [
   {
     date: '2016-05-03',
@@ -141,6 +147,7 @@ const tableData = [
         height: 60px;
         line-height: 60px;
         border-bottom: 1px solid #f0f5f0;
+
         span {
           font-family: PingFangSC-Semibold;
           font-size: 18px;
@@ -149,11 +156,13 @@ const tableData = [
 
       .card_container {
         padding: 24px;
+
         .card {
           width: calc(50% - 8px);
           padding: 0 20px 20px;
           background-color: #f3f7fe;
           border-radius: 8px;
+
           .header {
             font-size: 18px;
             height: 57px;
@@ -165,13 +174,16 @@ const tableData = [
             margin-top: 80px;
             display: flex;
             justify-content: space-between;
+
             .datail_item {
               width: calc(33.33333% - 10px);
               height: 100px;
+
               .text {
                 color: hsla(0, 0%, 40%, 0.5);
                 font-size: 12px;
               }
+
               .number {
                 color: #1677ff;
                 font-family: AlipayNumber-Regular;
@@ -195,13 +207,14 @@ const tableData = [
         height: 60px;
         line-height: 60px;
         border-bottom: 1px solid #f0f5f0;
+
         span {
           font-family: PingFangSC-Semibold;
           font-size: 18px;
         }
       }
 
-      .flow_form{
+      .flow_form {
         padding: 0 20px;
         margin-top: 20px
       }

@@ -61,11 +61,11 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item prop="paymentPassword" label="支付密码">
-                <el-input v-model="form.paymentPassword" :prefix-icon="Key" placeholder="请输入支付密码"
+                <el-input show-password v-model="form.paymentPassword" :prefix-icon="Key" placeholder="请输入支付密码"
                   size="large"></el-input>
               </el-form-item>
               <el-form-item prop="anewPaymentPassword" label="确认支付密码">
-                <el-input v-model="form.anewPaymentPassword" :prefix-icon="Key" placeholder="请重复输入支付密码"
+                <el-input show-password v-model="form.anewPaymentPassword" :prefix-icon="Key" placeholder="请重复输入支付密码"
                   size="large"></el-input>
               </el-form-item>
             </template>
@@ -129,28 +129,31 @@ const form = reactive({
 })
 
 const rules = reactive({
-  username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
-  password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
+  username: [{ required: true, message: '用户名不能为空', trigger: 'change' }],
+  password: [{ required: true, message: '密码不能为空', trigger: 'change' }],
   anewPassword: [
-    { required: true, trigger: 'blur' },
-    { validator: validateAnewPassword, trigger: 'blur' },
+    { required: true, trigger: 'change' },
+    { validator: validateAnewPassword, trigger: 'change' },
   ],
   iphoneNumber: [
-    { required: true, message: '手机号不能为空', trigger: 'blur' },
-    { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' },
+    { required: true, message: '手机号不能为空', trigger: 'change' },
+    { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'change' },
   ],
   code: [
-    { required: true, message: '请输入正确的验证码', trigger: 'blur' },
-    { validator: validateCode, trigger: 'blur' },
+    { required: true, message: '请输入正确的验证码', trigger: 'change' },
+    { validator: validateCode, trigger: 'change' },
   ],
-  iphoneCode: [{ required: true, message: '请输入正确的手机验证码', trigger: 'blur' }],
-  age: [{ required: true, message: '年龄不能为空', trigger: 'blur' }],
-  nation: [{ required: true, message: '民族不能为空', trigger: 'blur' }],
+  iphoneCode: [{ required: true, message: '请输入正确的手机验证码', trigger: 'change' }],
+  age: [{ required: true, message: '年龄不能为空', trigger: 'change' }],
+  nation: [{ required: true, message: '民族不能为空', trigger: 'change' }],
   gender: [{ required: true, trigger: 'change' }],
-  paymentPassword: [{ required: true, message: '请输入支付密码', trigger: 'blur' }],
+  paymentPassword: [
+    { required: true, message: '请输入支付密码', trigger: 'change' },
+    { pattern: /^\d{6}$/, message: '支付密码长度必须为6个数字', trigger: 'change' }
+  ],
   anewPaymentPassword: [
-    { required: true, trigger: 'blur' },
-    { validator: validateAnewPaymentPassword, trigger: 'blur' },
+    { required: true, trigger: 'change' },
+    { validator: validateAnewPaymentPassword, trigger: 'change' },
   ],
 })
 

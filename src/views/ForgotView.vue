@@ -4,43 +4,51 @@
       <div class="forgot_form">
         <div class="top">
           <div @click="back" class="top_text">
-            <el-icon><ArrowLeftBold /></el-icon>
+            <el-icon>
+              <ArrowLeftBold />
+            </el-icon>
             <span>返回</span>
           </div>
         </div>
-        <div class="title">{{ route.query.action?'修改密码':isNext ? '重置密码' : '忘记密码' }}</div>
+        <div class="title">{{ route.query.action ? '修改密码' : isNext ? '重置密码' : '忘记密码' }}</div>
         <div class="container">
           <el-form ref="ruleFormRef" :model="form" :rules="rules" label-width="auto" label-position="left">
             <template v-if="!isNext">
               <el-form-item prop="iphoneNumber" label="手机号：">
-                <el-input v-model="form.iphoneNumber" :prefix-icon="Iphone" placeholder="请输入手机号" size="large"></el-input>
+                <el-input v-model="form.iphoneNumber" :prefix-icon="Iphone" placeholder="请输入手机号"
+                  size="large"></el-input>
               </el-form-item>
               <el-form-item prop="code" class="captcha_form_item" label="验证码：">
                 <el-input v-model="form.code" :prefix-icon="Edit" placeholder="请输入验证码" size="large"></el-input>
-                <div class="captcha"><Captcha @get-captcha-text="getCaptchaText" /></div>
+                <div class="captcha">
+                  <Captcha @get-captcha-text="getCaptchaText" />
+                </div>
               </el-form-item>
               <el-form-item prop="iphoneCode" class="code_form_item" label="手机验证码：">
-                <el-input v-model="form.iphoneCode" :prefix-icon="Notification" placeholder="请输入手机验证码" size="large"></el-input>
-                <div class="code"><VerificationCode /></div>
+                <el-input v-model="form.iphoneCode" :prefix-icon="Notification" placeholder="请输入手机验证码"
+                  size="large"></el-input>
+                <div class="code">
+                  <VerificationCode />
+                </div>
               </el-form-item>
             </template>
 
             <template v-else>
               <el-form-item prop="password" label="密码：">
-                <el-input v-model="form.password" :prefix-icon="Lock" placeholder="请输入密码" size="large"></el-input>
+                <el-input show-password v-model="form.password" :prefix-icon="Lock" placeholder="请输入密码"
+                  size="large"></el-input>
               </el-form-item>
               <el-form-item prop="anewPassword" label="确认密码：">
-                <el-input v-model="form.anewPassword" :prefix-icon="Refresh" placeholder="请重复输入密码" size="large"></el-input>
+                <el-input show-password v-model="form.anewPassword" :prefix-icon="Refresh" placeholder="请重复输入密码"
+                  size="large"></el-input>
               </el-form-item>
             </template>
 
             <el-form-item>
-              <el-button v-if="!isNext" @click="nextForm" style="width: 100%; box-shadow: 0 3px 12px 0 rgba(39, 125, 255, 0.3)" type="primary"
-                >下一步</el-button
-              >
-              <el-button v-else @click="submitForm" style="width: 100%; box-shadow: 0 3px 12px 0 rgba(39, 125, 255, 0.3)" type="primary"
-                >确认修改</el-button
-              >
+              <el-button v-if="!isNext" @click="nextForm"
+                style="width: 100%; box-shadow: 0 3px 12px 0 rgba(39, 125, 255, 0.3)" type="primary">下一步</el-button>
+              <el-button v-else @click="submitForm"
+                style="width: 100%; box-shadow: 0 3px 12px 0 rgba(39, 125, 255, 0.3)" type="primary">确认修改</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -59,9 +67,12 @@ import Captcha from '@/components/Captcha.vue'
 import VerificationCode from '@/components/VerificationCode.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { reactive, ref } from 'vue'
+import { useUserStore } from '@/stores/useUserStore'
 
+const store = useUserStore()
+const { forgotUser } = store
 const router = useRouter()
-const route=useRoute()
+const route = useRoute()
 // 正确的验证码
 let code = ref('')
 // 当前表单对象
@@ -132,11 +143,9 @@ function submitForm() {
   ruleFormRef.value.validateField(['password', 'anewPassword'], (valid) => {
     if (valid) {
       // 表单验证规则通过
-      // 在此发起请求......
-      router.push('/login')
-      ElMessage({
-        message: '修改成功',
-        type: 'success',
+      forgotUser({
+        uPhone: form.iphoneNumber,
+        uAccountPassword: form.password
       })
     }
   })
@@ -199,16 +208,20 @@ function back() {
       .container {
         width: 400px;
         margin: 0 auto;
+
         .captcha_form_item {
           position: relative;
+
           .captcha {
             height: 38px;
             position: absolute;
             right: 0;
           }
         }
+
         .code_form_item {
           position: relative;
+
           .code {
             position: absolute;
             right: 0;

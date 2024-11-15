@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { reqLogin, reqUserInfo, reqRegisterUser } from '@/api/user'
+import { reqLogin, reqUserInfo, reqRegisterUser, reqForgotUser } from '@/api/user'
 import { useRouter } from 'vue-router';
 
 export const useUserStore = defineStore('user', () => {
@@ -75,5 +75,18 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return { userInfo, getUserLogin, getUserInfo, registerUser }
+  // 修改用户密码
+  async function forgotUser(data) {
+    const res = await reqForgotUser(data)
+    if (res) {
+      router.push('/login')
+      ElMessage({
+        message: '修改成功',
+        type: 'success',
+      })
+    }
+
+  }
+
+  return { userInfo, getUserLogin, getUserInfo, registerUser, forgotUser }
 })

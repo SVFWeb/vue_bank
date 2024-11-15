@@ -65,18 +65,9 @@
 import { Coin, UserFilled } from '@element-plus/icons-vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/useUserStore';
-import { onMounted } from 'vue';
 
 const store = useUserStore()
 const { userInfo } = storeToRefs(store)
-const { getUserInfo } = store
-
-
-onMounted( () => {
-  getUserInfo({
-    uid: localStorage.getItem('token')
-  })
-})
 
 </script>
 

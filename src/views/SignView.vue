@@ -88,7 +88,6 @@
 
 <script setup>
 import { ArrowLeftBold, UserFilled, Lock, Refresh, Iphone, Edit, Notification, CollectionTag, Watch, Key } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
 import Captcha from '@/components/Captcha.vue'
 import VerificationCode from '@/components/VerificationCode.vue'
 import { reactive, ref } from 'vue'
@@ -213,8 +212,6 @@ function submitForm(formEl) {
         uAccountPassword: form.password,
         uPaymentPassword: form.paymentPassword,
       })
-
-
 
     }
   })

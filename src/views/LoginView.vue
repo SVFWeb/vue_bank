@@ -109,7 +109,6 @@ import Captcha from '@/components/Captcha.vue'
 import { User, Lock, Edit } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router';
-
 import { useUserStore } from '@/stores/useUserStore';
 
 // 正确的验证码
@@ -148,7 +147,6 @@ function validateCode(rules, value, callback) {
     callback()
   }
 }
-
 
 // 提交表单
 async function submitForm(formEl) {

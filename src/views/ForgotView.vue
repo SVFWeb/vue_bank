@@ -70,9 +70,6 @@ const ruleFormRef = ref()
 let isNext = ref(false)
 
 
-console.log(route.query.action);
-
-
 const form = reactive({
   iphoneNumber: '',
   code: '',

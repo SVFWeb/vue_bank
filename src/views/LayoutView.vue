@@ -22,6 +22,17 @@
 <script setup>
 import Menu from '@/components/Menu.vue'
 import Tabber from '@/components/Tabber.vue';
+import { useUserStore } from '@/stores/useUserStore';
+import { onMounted } from 'vue'
+
+const store = useUserStore()
+const { getUserInfo } = store
+
+onMounted(() => {
+  getUserInfo({
+    uid: localStorage.getItem('token')
+  })
+})
 
 
 

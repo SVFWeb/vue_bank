@@ -36,7 +36,7 @@
             </div>
 
             <div class="right">
-              <p>15218786403</p>
+              <p>{{ userInfo.phone }}</p>
               <p class="controls">修改手机</p>
             </div>
           </div>
@@ -78,18 +78,24 @@
 </template>
 
 <script setup>
+import { useUserStore } from '@/stores/useUserStore';
+import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const store = useUserStore()
+const { userInfo } = storeToRefs(store)
 
 function changePassword() {
   router.push({ name: 'forgot', query: { action: '修改密码' } })
 }
+
 </script>
 
 <style lang="less" scoped>
 .settings {
   height: 100%;
+
   .settings_container {
     height: 100%;
 
@@ -165,6 +171,7 @@ function changePassword() {
 
           .right {
             display: flex;
+
             .controls {
               cursor: pointer;
               display: inline-block;

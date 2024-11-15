@@ -1,39 +1,64 @@
 <script setup>
-import { reactive,ref } from "vue";
+import { reactive, ref, computed } from "vue";
 
 let PropsObj = reactive({
   IsShow: false,
   dialogVisible: false,
   checked1: 0, //申请提前还款的收集数组
-  input: "",   //申请提前还款的收集字段
+  input: "", //申请提前还款的收集字段
   Zindex: "2", //控制 2为点击 1为联系方式
   ZDindex: "1", //控制贷款提醒文本
   DK_DK_show: "0",
+  total: 0, //总的借款
+  data: [],
 });
-
+//合同测试数据
 let h_list = ref([
   {
-    id:"1",
-    name:"科技贷",
-    conSal:3000,
+    id: "1",
+    name: "科技贷",
+    conSal: 3000,
   },
   {
-    id:"2",
-    name:"科技贷",
-    conSal:3000,
+    id: "2",
+    name: "科技贷",
+    conSal: 6000,
   },
   {
-    id:"3",
-    name:"科技贷",
-    conSal:4000,
+    id: "3",
+    name: "科技贷",
+    conSal: 4000,
   },
+]);
 
-])
+let list = ref(["1", "2", "3", "4"]);
 
-//全部的复选框都为选中
-const subit_chenck = () => {
-  PropsObj.checked1 = true
-}
+//借款总需要还的总金额
+/* const totalSum = computed(() =>{
+
+  h_list.value.forEach(item =>{
+     PropsObj.total += item.conSal
+  })
+ 
+  return PropsObj.total
+
+})
+ */
+
+//复选框change事件
+const chenckChange = (val, item) => {
+  console.log("22");
+};
+//提交还款
+const subimhander = function (item, index) {
+  //获取到输入input还钱的金额
+  console.log(PropsObj.data[index]);
+  //模拟携带请求对金额进行修改
+  h_list.value[index].conSal -= PropsObj.data[index];
+
+  //当金额为0时再发请求删除合同
+
+};
 
 //提前还款申请弹出层回调
 const PropsHander = () => {
@@ -62,7 +87,13 @@ const handleClose = (done) => {
           </i>
           <p>提前贷款申请</p>
         </div>
-        <div class="main_item3" @click="PropsObj.IsShow = true; PropsObj.DK_DK_show = '5'">
+        <div
+          class="main_item3"
+          @click="
+            PropsObj.IsShow = true;
+            PropsObj.DK_DK_show = '5';
+          "
+        >
           <i>
             <img src="../../../public/image//D-Foot-img/D-jindu.png" alt="" />
           </i>
@@ -73,9 +104,24 @@ const handleClose = (done) => {
       <div class="main">
         <div class="main_left">
           <div class="main_left_top">
-            <a href="javaScript:;" @click="PropsObj.ZDindex = '1'" :class="{ active: PropsObj.ZDindex == '1' }">贷款提醒</a>
-            <a href="javaScript:;" @click="PropsObj.ZDindex = '2'" :class="{ active: PropsObj.ZDindex == '2' }">征信提醒</a>
-            <a href="javaScript:;" @click="PropsObj.ZDindex = '3'" :class="{ active: PropsObj.ZDindex == '3' }">还款提醒</a>
+            <a
+              href="javaScript:;"
+              @click="PropsObj.ZDindex = '1'"
+              :class="{ active: PropsObj.ZDindex == '1' }"
+              >贷款提醒</a
+            >
+            <a
+              href="javaScript:;"
+              @click="PropsObj.ZDindex = '2'"
+              :class="{ active: PropsObj.ZDindex == '2' }"
+              >征信提醒</a
+            >
+            <a
+              href="javaScript:;"
+              @click="PropsObj.ZDindex = '3'"
+              :class="{ active: PropsObj.ZDindex == '3' }"
+              >还款提醒</a
+            >
           </div>
           <div class="main_left_text">
             <p v-if="PropsObj.ZDindex == '1'">
@@ -102,7 +148,12 @@ const handleClose = (done) => {
           </div>
           <!-- 资助中心联系方式 -->
           <div class="main_right_text">
-            <a href="javaScript:;" v-if="PropsObj.Zindex == '2'" @click="PropsObj.Zindex = '1'">点击查看</a>
+            <a
+              href="javaScript:;"
+              v-if="PropsObj.Zindex == '2'"
+              @click="PropsObj.Zindex = '1'"
+              >点击查看</a
+            >
             <div class="main_right_pp" v-if="PropsObj.Zindex == '1'">
               <p>
                 <img src="../../../public/image/Z-zh-img/Z-1-name.png" alt="" />
@@ -113,7 +164,10 @@ const handleClose = (done) => {
                 资助中心地址：广西钦州市文峰南路367号钦南区教育局
               </p>
               <p>
-                <img src="../../../public/image/Z-zh-img/Z-3-youbian.png" alt="" />
+                <img
+                  src="../../../public/image/Z-zh-img/Z-3-youbian.png"
+                  alt=""
+                />
                 邮政编码：535000
               </p>
               <p>
@@ -121,11 +175,17 @@ const handleClose = (done) => {
                 QQ：273408058
               </p>
               <p>
-                <img src="../../../public/image/Z-zh-img/Z-5-PhoneRen.png" alt="" />
+                <img
+                  src="../../../public/image/Z-zh-img/Z-5-PhoneRen.png"
+                  alt=""
+                />
                 联系人：xxx
               </p>
               <p>
-                <img src="../../../public/image/Z-zh-img/Z-6-PHONE.png" alt="" />
+                <img
+                  src="../../../public/image/Z-zh-img/Z-6-PHONE.png"
+                  alt=""
+                />
                 联系电话：0777-2697375
               </p>
             </div>
@@ -136,106 +196,161 @@ const handleClose = (done) => {
       <div class="butt">
         <div class="butt_item">
           <i>
-            <img src="../../../public/image//D-Foot-img/D-Foot-book.png" alt="" />
+            <img
+              src="../../../public/image//D-Foot-img/D-Foot-book.png"
+              alt=""
+            />
           </i>
           <div class="butt_item_right">
             <p>申请流程</p>
             <span> 首贷的申请流程及所需材料</span>
-            <a href="javaScript:;" @click="
-              PropsObj.IsShow = true;
-            PropsObj.DK_DK_show = '1';
-            ">点击查看 ></a>
+            <a
+              href="javaScript:;"
+              @click="
+                PropsObj.IsShow = true;
+                PropsObj.DK_DK_show = '1';
+              "
+              >点击查看 ></a
+            >
           </div>
         </div>
         <div class="butt_item">
           <i>
-            <img src="../../../public/image//D-Foot-img/D-Foot-mouey+.png" alt="" />
+            <img
+              src="../../../public/image//D-Foot-img/D-Foot-mouey+.png"
+              alt=""
+            />
           </i>
           <div class="butt_item_right">
             <p>续贷帮助</p>
             <span> 续贷的申请流程及所需材料</span>
-            <a href="javaScript:;" @click="
-              PropsObj.IsShow = true;
-            PropsObj.DK_DK_show = '2';
-            ">点击查看 ></a>
+            <a
+              href="javaScript:;"
+              @click="
+                PropsObj.IsShow = true;
+                PropsObj.DK_DK_show = '2';
+              "
+              >点击查看 ></a
+            >
           </div>
         </div>
         <div class="butt_item">
           <i>
-            <img src="../../../public/image//D-Foot-img/D-Foot-help.png" alt="" />
+            <img
+              src="../../../public/image//D-Foot-img/D-Foot-help.png"
+              alt=""
+            />
           </i>
           <div class="butt_item_right">
             <p>常见问题</p>
             <span>初次贷款申请，续贷等其他常见问题</span>
-            <a href="javaScript:;" @click="
-              PropsObj.IsShow = true;
-            PropsObj.DK_DK_show = '3';
-            ">点击查看 ></a>
+            <a
+              href="javaScript:;"
+              @click="
+                PropsObj.IsShow = true;
+                PropsObj.DK_DK_show = '3';
+              "
+              >点击查看 ></a
+            >
           </div>
         </div>
         <div class="butt_item">
           <i>
-            <img src="../../../public/image//D-Foot-img/D-foot-huan-help.png" alt="" />
+            <img
+              src="../../../public/image//D-Foot-img/D-foot-huan-help.png"
+              alt=""
+            />
           </i>
           <div class="butt_item_right">
             <p>提前还款帮助</p>
             <span>提前还款申请时间及查询</span>
-            <a href="javaScript:;" @click="
-              PropsObj.IsShow = true;
-            PropsObj.DK_DK_show = '4';
-            ">点击查看 ></a>
+            <a
+              href="javaScript:;"
+              @click="
+                PropsObj.IsShow = true;
+                PropsObj.DK_DK_show = '4';
+              "
+              >点击查看 ></a
+            >
           </div>
         </div>
       </div>
     </div>
 
     <!-- 提前还款申请弹出层回调弹出层 -->
-    <el-dialog v-model="PropsObj.dialogVisible" title="提前还款申请" width="964" :before-close="handleClose">
+    <el-dialog
+      v-model="PropsObj.dialogVisible"
+      title="提前还款申请"
+      width="964"
+      :before-close="handleClose"
+    >
       <div class="huan_top">
         <div class="quan_butt">
-          <el-button type="success" @click="subit_chenck">全部结清</el-button>
-          <p>总款：3000</p>
-        </div>
-        <div class="huan_top_flex">
-          <p>2023-2024学年合同</p>
-          <p>合计（元）：<span style="color: red">￥0</span></p>
+          <el-button type="success">全部结清</el-button>
         </div>
 
-        <div class="huan_main">
-          <div class="huan_he">
-            <div class="huan_chenk">
-              <el-checkbox v-model="PropsObj.checked1" size="large" />
+        <div class="huan_main1" v-for="(item, index) in h_list" :key="item.id" >
+          <div class="huan_top_flex">
+            <p>2023-2024学年合同</p>
+            <p>
+              合计（元）：<span style="color: red">￥{{ item.conSal }}</span>
+            </p>
+          </div>
+
+          <div class="huan_main">
+            <div class="huan_he">
+              <div class="huan_chenk">
+                <el-checkbox
+                  @change="chenckChange($event, item)"
+                  :label="item.id"
+                  value="11"
+                  ><hr
+                /></el-checkbox>
+              </div>
             </div>
-          </div>
-          <div class="huan_yue">
-            <p>合同余额（元）</p>
-            <p>￥9000</p>
-          </div>
-
-          <div class="huan_e">
-            <p>近期应还金额（元）</p>
-            <p>￥000</p>
-          </div>
-
-          <div class="huan_main_ban_kong"></div>
-
-          <div class="huan_butt">
-            <div class="huan_butt_width">
-              <el-button type="primary">全部结清</el-button>
+            <div class="huan_yue">
+              <p>合同余额（元）</p>
+              <p>￥{{ item.conSal }}</p>
             </div>
 
-            <el-input size="small" v-model="PropsObj.input" style="width: 165px" placeholder="Please input" />
-          </div>
-          <div class="huan_subim">
-            <el-button class="butt" type="primary">提交申请</el-button>
+            <div class="huan_e">
+              <p>近期应还金额（元）</p>
+              <p>￥000</p>
+            </div>
+
+            <div class="huan_main_ban_kong"></div>
+
+            <div class="huan_butt">
+              <div class="huan_butt_width">
+                <el-button type="primary">全部结清</el-button>
+              </div>
+
+              <el-input
+                size="small"
+                v-model="PropsObj.data[index]"
+                style="width: 165px"
+                placeholder="Please input"
+              />
+            </div>
+            <div class="huan_subim">
+              <el-button
+                class="butt"
+                @click="subimhander(item, index)"
+                type="primary"
+                >提交申请</el-button
+              >
+            </div>
           </div>
         </div>
       </div>
     </el-dialog>
 
     <!-- 底部查看帮助弹出层 -->
-    <el-dialog v-model="PropsObj.IsShow" width="964" :before-close="handleClose">
-
+    <el-dialog
+      v-model="PropsObj.IsShow"
+      width="964"
+      :before-close="handleClose"
+    >
       <div class="ti_huan_dk_help" v-if="PropsObj.DK_DK_show == '5'">
         <h1>首贷流程图</h1>
         <div class="dk_help_text">
@@ -243,11 +358,17 @@ const handleClose = (done) => {
             <p>合同名称</p>
           </div>
           <div class="dk_help_next">
-            <el-steps style="max-width: 1000px" :active="3" align-center finish-status="success" simple>
+            <el-steps
+              style="max-width: 1000px"
+              :active="3"
+              align-center
+              finish-status="success"
+              simple
+            >
               <el-step title="提交申请" />
-              <el-step title="远程受理"  />
-              <el-step title="签订合同"  />
-              <el-step title="审批中"  />
+              <el-step title="远程受理" />
+              <el-step title="签订合同" />
+              <el-step title="审批中" />
               <el-step title="审批通过" />
             </el-steps>
           </div>
@@ -260,9 +381,11 @@ const handleClose = (done) => {
           <img src="../../../public/image/dk-liucheng.png" alt="" />
         </div>
         <div class="one1_text">
-          <p> 首贷的申请流程及所需材料:</p>
+          <p>首贷的申请流程及所需材料:</p>
           <p>
-            1.注册学生在线服务系统:登录国家开发银行 助学贷款学生在线系统(https://sls.cdb.com.cn)，注册学生在线服务系统( );"
+            1.注册学生在线服务系统:登录国家开发银行
+            助学贷款学生在线系统(https://sls.cdb.com.cn)，注册学生在线服务系统(
+            );"
           </p>
 
           <p>
@@ -300,12 +423,13 @@ const handleClose = (done) => {
         <div class="one1_wen">
           <p>
             温馨提示：如学生的《学生证》原件遗失，可由高校开具的《学生在校证明》代替，县级资助中心留存《学生在校证明》原件。
-            学生可登录国家开发银行助学贷款信息网点击 学生在线服务系统左侧 助学贷款介绍中查看助学贷款范围
+            学生可登录国家开发银行助学贷款信息网点击 学生在线服务系统左侧
+            助学贷款介绍中查看助学贷款范围
           </p>
         </div>
       </div>
       <div class="one2" v-if="PropsObj.DK_DK_show == '2'">
-        <h1> 续贷的申请流程及所需材料</h1>
+        <h1>续贷的申请流程及所需材料</h1>
 
         <div class="one2_img">
           <img src="../../../public/image/dk-help.png" alt="" />
@@ -314,27 +438,31 @@ const handleClose = (done) => {
       <div class="one3" v-if="PropsObj.DK_DK_show == '3'">
         <h1>常见问题</h1>
         <div class="one3_text">
-
           <h4>一、还款、还利息、提前还款、扣款日、扣款审批中</h4>
           <p>
             建议您登录学生在线系统（https://sls.cdb.com.cn）、国家开发银行助学贷款APP或阅读借款合同查询您的还款计划，并按期足额还款。如果您的助学贷款账户为支付宝账户(****.cdb@sina.cn)，那么您可以登录任意支付宝，首页搜索“国家开发银行助学贷款”小程序,通过“我要还款”功能使用主动还款功能，
             或存钱到此支付宝余额里（**不能**存在余额宝或者支付宝账户绑定的银行卡），指定支付宝账号要实名认证，等待系统自动扣款。如果您的助学贷款账户是代理结算银行账户，您可以登录代理结算银行手机终端App
-            搜索“助学贷款”进入国家开发银行助学贷款专区的“我要还款”功能中进行还款， 或存钱到绑定的代理结算银行账户中等待系统自动扣款。也可以通过云闪付APP或去全国任意一个支持POS机还款的县级资助管理部门，
-            用银联卡（须为借记卡）还款。您可以在系统提示的还款日下个月初登录学生在线系统查询还款情况。</p>
+            搜索“助学贷款”进入国家开发银行助学贷款专区的“我要还款”功能中进行还款，
+            或存钱到绑定的代理结算银行账户中等待系统自动扣款。也可以通过云闪付APP或去全国任意一个支持POS机还款的县级资助管理部门，
+            用银联卡（须为借记卡）还款。您可以在系统提示的还款日下个月初登录学生在线系统查询还款情况。
+          </p>
           <p>还款结算时间说明：</p>
           <p>1、通过主动还款的方式，结算时间为系统扣款时间次日零点开始结算。</p>
-          <p>2、通过把钱存到指定还款账户等待被动扣款的方式，扣款时间为系统上还款时间次日零点开始陆续扣款。</p>
+          <p>
+            2、通过把钱存到指定还款账户等待被动扣款的方式，扣款时间为系统上还款时间次日零点开始陆续扣款。
+          </p>
 
           <h4>1.自付本息还款时间</h4>
-          <p class="H_text_hei2">您在就读高校期间的利息由财政全额贴息，贴息截止日后，本息由学生自己承担。建议您按期登录学生在线系统或阅读借款合同查询您的还款计划，并按期足额还款。</p>
+          <p class="H_text_hei2">
+            您在就读高校期间的利息由财政全额贴息，贴息截止日后，本息由学生自己承担。建议您按期登录学生在线系统或阅读借款合同查询您的还款计划，并按期足额还款。
+          </p>
           <p class="H_text_hei2">
             如您在贷款期间，考上了更高一级的学位，比如专科升本科，本科升研究生，则在上学期间，其贷款利息依旧由地方财政进行补贴，一直到其毕业为止。在升学毕业之前，需联系资助中心老师办理就学信息变更及还款计划变更，如不变更，则默认视为其已经毕业，需要按照国家开发银行规定，自付利息。（变更时间截至到7月31日）。
           </p>
 
-
           <h4>2.正常还款</h4>
           <p class="H_text_hei2">
-             助学贷款：按照《借款合同》约定，借款学生从贴息截止日当年开始，宽限期内只偿还利息，宽限期后偿还部分本金和利息，每年需在11月1日-12月20日还款，最后一年以合同到期日为准还清贷款。系统提示的还款日期下月初登录系统查询还款记录。
+            助学贷款：按照《借款合同》约定，借款学生从贴息截止日当年开始，宽限期内只偿还利息，宽限期后偿还部分本金和利息，每年需在11月1日-12月20日还款，最后一年以合同到期日为准还清贷款。系统提示的还款日期下月初登录系统查询还款记录。
           </p>
 
           <p class="H_text_hei2">宽限期：2015年之前签订合同，宽限期为2年；</p>
@@ -345,9 +473,7 @@ const handleClose = (done) => {
           </p>
 
           <h4>3.提前还款</h4>
-          <p class="H_text_hei3">
-            提前还款前，需要提交申请。
-          </p>
+          <p class="H_text_hei3">提前还款前，需要提交申请。</p>
           <p class="H_text_hei3">
             每天均可提交提前还款申请，不同申请日期对应不同的还款日，具体为：每月15日前申请，还款日为当月20日；每月15日之后申请，还款日为次月20日；10月16日-12月15日之间申请，
             还款日期为12月20日。提前还款申请提交完毕后，在系统显示的还款日期前通过代理结算机构或POS机刷卡还款。
@@ -369,12 +495,10 @@ const handleClose = (done) => {
           </p>
 
           <h4>5.还款结果查询</h4>
-          <p class="H_text_hei3">需要在系统显示的还款日期下月初登录学生在线系统查询还款记录。</p>
-
+          <p class="H_text_hei3">
+            需要在系统显示的还款日期下月初登录学生在线系统查询还款记录。
+          </p>
         </div>
-
-
-
       </div>
       <div class="one4" v-if="PropsObj.DK_DK_show == '4'">
         <h1>提前还款申请时间及查询</h1>
@@ -459,12 +583,11 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
-        p{
+        p {
           font-size: 21px;
           margin-top: 17px;
           color: white;
         }
-
       }
 
       .main_item3 {
@@ -487,7 +610,7 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
-        p{
+        p {
           font-size: 21px;
           margin-top: 17px;
           color: white;
@@ -590,7 +713,6 @@ const handleClose = (done) => {
             padding: 30px 20px 0 20px;
             margin-left: 10px;
 
-
             p {
               font-size: 15px;
             }
@@ -655,8 +777,8 @@ const handleClose = (done) => {
 
   margin: 0 auto;
 
-  .quan_butt {
-    margin-bottom: 15px;
+  .huan_main1 {
+    margin-bottom: 30px;
   }
 
   .huan_top_flex {
@@ -732,12 +854,9 @@ const handleClose = (done) => {
 
 //底部弹出层样式
 .ti_huan_dk_help {
-
-
   margin: 0 34px;
 
   .dk_help_text {
-
     .dk_help_head {
       width: 100%;
       height: 60px;
@@ -753,10 +872,7 @@ const handleClose = (done) => {
       border: 1px solid #eaeaea;
       line-height: 120px;
     }
-
-
   }
-
 }
 
 .one1 {

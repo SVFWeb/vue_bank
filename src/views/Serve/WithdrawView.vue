@@ -11,7 +11,7 @@
 
                     <div class="balance">
                         余额：
-                        <span>0.00</span>
+                        <span>{{ userInfo.balance }}</span>
                         元
                     </div>
 
@@ -41,7 +41,7 @@
                             <el-input style="width: 100px;" v-model="form.funds" />
                         </el-form-item>
                         <el-form-item prop="password" label="支付密码：">
-                            <el-input style="width: 100px;" v-model="form.password" />
+                            <el-input show-password style="width: 100px;" v-model="form.password" />
                         </el-form-item>
 
                         <el-form-item>
@@ -68,7 +68,14 @@
 </template>
 
 <script setup>
+import { useUserStore } from '@/stores/useUserStore';
+import { ElMessage } from 'element-plus'
+import { storeToRefs } from 'pinia';
 import { ref, reactive } from 'vue';
+
+const store = useUserStore()
+const { userInfo } = storeToRefs(store)
+const { balanceUser, getUserInfo } = store
 const randomNumber = ref(Math.floor(Math.random() * (1000 - 99 + 1)) + 1000)
 // 当前选择的银行卡
 const isActive = ref(0)
@@ -84,7 +91,10 @@ const form = reactive({
 
 const rules = reactive({
     funds: [{ required: true, message: '请输入正确的金额', trigger: 'change' },],
-    password: [{ required: true, message: '支付密码不能为空', trigger: 'change' },]
+    password: [
+        { required: true, message: '支付密码不能为空', trigger: 'change' },
+        { validator: validatePassword, trigger: 'change' }
+    ]
 })
 
 // 表单校验
@@ -97,14 +107,51 @@ const submitForm = async (formEl) => {
     })
 }
 
+const handleClose = (done) => {
+    ElMessageBox.confirm('确定放弃提现余额吗？')
+        .then(() => {
+            done()
+        })
+}
+
+// 支付密码校验
+function validatePassword(rules, value, callback) {
+    if (value != userInfo.value.paymentPassword) {
+        callback(new Error('支付密码错误'))
+    } else {
+        callback()
+    }
+}
+
 function againWithdraw() {
     dialogVisible.value = false
-    // 请求接口
     loading.value = true
-    setTimeout(() => {
+
+    if (form.funds > userInfo.value.balance) {
+        ElMessage({
+            message: '余额不足',
+            type: 'error',
+        })
         loading.value = false
-    }, 2000)
-    //显示充值成功的提示
+    } else {
+        balanceUser({
+            uid: userInfo.value.id,
+            uBalance: '-'+form.funds
+        }).then(() => {
+            getUserInfo({
+                uid: userInfo.value.id
+            })
+        })
+        setTimeout(() => {
+            // 消息提示
+            ElMessage({
+                message: '已成功提现到银行卡上',
+                type: 'success',
+            })
+            loading.value = false
+        }, 500)
+    }
+    ruleFormRef.value.resetFields()
 }
 
 </script>

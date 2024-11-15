@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { reqLogin, reqUserInfo } from '@/api/user'
+import { reqLogin, reqUserInfo, reqRegisterUser } from '@/api/user'
 import { useRouter } from 'vue-router';
 
 export const useUserStore = defineStore('user', () => {
@@ -23,18 +23,18 @@ export const useUserStore = defineStore('user', () => {
   // 用户登录
   async function getUserLogin(data) {
     const res = await reqLogin(data)
-    if (res === '登录成功') {
-      localStorage.setItem('token', res.uid)
-      // router.push('/home')
+    if (res.message === '登录成功') {
+      localStorage.setItem('token', res.user.uid)
+      router.push('/home')
       ElMessage({
-        message: res,
+        message: res.message,
         type: 'success',
       })
-    } else if (res === '该手机号未进行注册') {
+    } else if (res.message === '该手机号未进行注册') {
       ElMessage(res)
     } else {
       ElMessage({
-        message: res,
+        message: res.message,
         type: 'error',
       })
     }
@@ -57,5 +57,23 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return { userInfo, getUserLogin, getUserInfo }
+  // 用户注册
+  async function registerUser(data) {
+    const res = await reqRegisterUser(data)
+    if (res === '注册成功') {
+      router.push('/login')
+      ElMessage({
+        message: res,
+        type: 'success',
+      })
+    } else {
+      router.push('/sign')
+      ElMessage({
+        message: res,
+        type: 'error',
+      })
+    }
+  }
+
+  return { userInfo, getUserLogin, getUserInfo, registerUser }
 })

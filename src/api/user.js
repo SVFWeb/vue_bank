@@ -5,3 +5,6 @@ export const reqLogin = (data) => request.post('/user/login', data)
 
 //获取用户信息
 export const reqUserInfo=(data)=>request.post('/user/userinfo',data)
+
+// 用户注册
+export const reqRegisterUser=(data)=>request.post('/user/register',data)

@@ -1,5 +1,5 @@
 <script setup>
-import { reactive,ref } from "vue";
+import { reactive, ref } from "vue";
 
 let PropsObj = reactive({
   IsShow: false,
@@ -13,19 +13,19 @@ let PropsObj = reactive({
 
 let h_list = ref([
   {
-    id:"1",
-    name:"科技贷",
-    conSal:3000,
+    id: "1",
+    name: "科技贷",
+    conSal: 3000,
   },
   {
-    id:"2",
-    name:"科技贷",
-    conSal:3000,
+    id: "2",
+    name: "科技贷",
+    conSal: 3000,
   },
   {
-    id:"3",
-    name:"科技贷",
-    conSal:4000,
+    id: "3",
+    name: "科技贷",
+    conSal: 4000,
   },
 
 ])
@@ -245,9 +245,9 @@ const handleClose = (done) => {
           <div class="dk_help_next">
             <el-steps style="max-width: 1000px" :active="3" align-center finish-status="success" simple>
               <el-step title="提交申请" />
-              <el-step title="远程受理"  />
-              <el-step title="签订合同"  />
-              <el-step title="审批中"  />
+              <el-step title="远程受理" />
+              <el-step title="签订合同" />
+              <el-step title="审批中" />
               <el-step title="审批通过" />
             </el-steps>
           </div>
@@ -334,7 +334,7 @@ const handleClose = (done) => {
 
           <h4>2.正常还款</h4>
           <p class="H_text_hei2">
-             助学贷款：按照《借款合同》约定，借款学生从贴息截止日当年开始，宽限期内只偿还利息，宽限期后偿还部分本金和利息，每年需在11月1日-12月20日还款，最后一年以合同到期日为准还清贷款。系统提示的还款日期下月初登录系统查询还款记录。
+            助学贷款：按照《借款合同》约定，借款学生从贴息截止日当年开始，宽限期内只偿还利息，宽限期后偿还部分本金和利息，每年需在11月1日-12月20日还款，最后一年以合同到期日为准还清贷款。系统提示的还款日期下月初登录系统查询还款记录。
           </p>
 
           <p class="H_text_hei2">宽限期：2015年之前签订合同，宽限期为2年；</p>
@@ -396,7 +396,7 @@ const handleClose = (done) => {
 <style scoped lang="less">
 .top {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: #f4f5f6;
 
   .gu_main {
@@ -420,6 +420,7 @@ const handleClose = (done) => {
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-red.png");
         border-radius: 10px;
+
         i {
           display: flex;
           justify-content: center;
@@ -448,6 +449,7 @@ const handleClose = (done) => {
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-yell.png");
         border-radius: 10px;
+
         i {
           display: flex;
           justify-content: center;
@@ -459,7 +461,8 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
-        p{
+
+        p {
           font-size: 21px;
           margin-top: 17px;
           color: white;
@@ -476,6 +479,7 @@ const handleClose = (done) => {
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-green.png");
         border-radius: 10px;
+
         i {
           display: flex;
           justify-content: center;
@@ -487,7 +491,8 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
-        p{
+
+        p {
           font-size: 21px;
           margin-top: 17px;
           color: white;

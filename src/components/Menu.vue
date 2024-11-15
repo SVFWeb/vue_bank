@@ -7,7 +7,7 @@
             <el-sub-menu :index="'1'">
               <template #title>
                 <el-icon>
-                  <location />
+                  <Histogram/>
                 </el-icon>
                 <span>账户管理</span>
               </template>
@@ -21,7 +21,9 @@
 
             <el-sub-menu :index="'2'">
               <template #title>
-                <el-icon><icon-menu /></el-icon>
+                <el-icon>
+                  <TrendCharts />
+                </el-icon>
                 <span>资金服务</span>
               </template>
 
@@ -34,7 +36,9 @@
 
             <el-sub-menu :index="'3'">
               <template #title>
-                <el-icon><icon-menu /></el-icon>
+                <el-icon>
+                  <Grid />
+                </el-icon>
                 <span>贷款</span>
               </template>
 
@@ -55,7 +59,7 @@
 </template>
 
 <script setup>
-import { Menu as IconMenu, Location } from '@element-plus/icons-vue'
+import {  Histogram ,TrendCharts,Grid} from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()

@@ -348,14 +348,14 @@ const subim_form = async () => {
 
 <style lang="less" scoped>
 .main_top {
-    width: 1200px;
+    width: 100%;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
     margin: 0 auto;
 
     .main_top_list {
-        width: 1176px;
+        width: 100%;
 
         display: flex;
         justify-content: space-around;

@@ -27,12 +27,14 @@ import { useUserStore } from '@/stores/useUserStore';
 import { onMounted } from 'vue'
 
 const store = useUserStore()
-const { getUserInfo } = store
+const { getUserInfo,getAllUserInfo } = store
 
-onMounted(() => {
-  getUserInfo({
+onMounted(async () => {
+  await getUserInfo({
     uid: localStorage.getItem('token')
   })
+
+  await getAllUserInfo()
 })
 
 

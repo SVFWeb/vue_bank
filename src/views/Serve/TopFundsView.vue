@@ -66,15 +66,19 @@
                         </div>
                         <el-divider />
                         <div class="form">
-                            <el-form :model="form" label-width="auto" style="max-width: 200px" :rules="rules"
+
+                            <el-form :model="form" label-width="auto" style="max-width: 300px" :rules="rules"
                                 ref="ruleFormRef">
                                 <el-form-item prop="funds" label="充值金额：">
-                                    <el-input v-model="form.funds" />
+                                    <el-input v-model="form.funds"
+                                        :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
                                 </el-form-item>
                                 <el-form-item prop="password" label="支付密码：">
                                     <el-input show-password v-model="form.password" />
                                 </el-form-item>
                             </el-form>
+
                         </div>
                         <div class="btn">
                             <el-button type="primary" @click="submitForm(ruleFormRef)">确认充值</el-button>
@@ -157,17 +161,18 @@ const submitForm = async (formEl) => {
 }
 
 //再次确认充值
-function againTopFunds() {
+async function againTopFunds() {
     dialogVisible.value = false
     loading.value = true
-    balanceUser({
+    await balanceUser({
         uid: userInfo.value.id,
         uBalance: form.funds
-    }).then(() => {
-        getUserInfo({
-            uid: userInfo.value.id
-        })
     })
+
+    await getUserInfo({
+        uid: userInfo.value.id
+    })
+    
     setTimeout(() => {
         // 消息提示
         ElMessage({

@@ -20,11 +20,12 @@
                 <el-divider />
 
                 <div v-loading="loading" class="withdraw_form">
-                    <el-form :model="form" label-width="auto" style="max-width: 200px" :rules="rules" ref="ruleFormRef">
+                    <el-form :model="form" label-width="auto" style="max-width: 300px" :rules="rules" ref="ruleFormRef">
                         <el-form-item label="选择银行卡：">
                             <ul class="withdraw_list">
                                 <li @click="isActive = index" :class="{ active: isActive === index }"
                                     v-for="(item, index) in 5" :key="index">
+
                                     <div class="right">
                                         <img :src="`../../../public/image/TopFunds/1000${index + 1}.png`" alt="" />
                                         <span>尾号：{{ randomNumber * (index + 1) }}</span>
@@ -38,10 +39,12 @@
                             </ul>
                         </el-form-item>
                         <el-form-item prop="funds" label="提现金额：">
-                            <el-input style="width: 100px;" v-model="form.funds" />
+                            <el-input v-model="form.funds"
+                                :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
                         </el-form-item>
                         <el-form-item prop="password" label="支付密码：">
-                            <el-input show-password style="width: 100px;" v-model="form.password" />
+                            <el-input show-password v-model="form.password" />
                         </el-form-item>
 
                         <el-form-item>
@@ -123,7 +126,7 @@ function validatePassword(rules, value, callback) {
     }
 }
 
-function againWithdraw() {
+async function againWithdraw() {
     dialogVisible.value = false
     loading.value = true
 
@@ -134,14 +137,15 @@ function againWithdraw() {
         })
         loading.value = false
     } else {
-        balanceUser({
+        await balanceUser({
             uid: userInfo.value.id,
-            uBalance: '-'+form.funds
-        }).then(() => {
-            getUserInfo({
-                uid: userInfo.value.id
-            })
+            uBalance: '-' + form.funds
         })
+
+        await getUserInfo({
+            uid: userInfo.value.id
+        })
+        
         setTimeout(() => {
             // 消息提示
             ElMessage({
@@ -198,7 +202,7 @@ function againWithdraw() {
         .withdraw_form {
             padding: 15px 15px 15px 100px;
             width: 100%;
-            height: 600px;
+            height: 100%;
 
             .withdraw_list {
 

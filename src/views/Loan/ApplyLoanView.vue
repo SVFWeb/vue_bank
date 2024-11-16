@@ -1,10 +1,15 @@
 <script setup>
 import { reactive, ref, useTemplateRef } from 'vue';
-
+import { storeToRefs } from 'pinia';
 //借款仓库
 import { useLoanStore } from '@/stores/loan';
+import { useUserStore } from '@/stores/useUserStore';
 //仓库实例
 const loanStore = useLoanStore();
+const userStore = useUserStore();
+const { userInfo }=storeToRefs(userStore)
+
+
 //弹出消息提示
 import { ElMessage } from 'element-plus'
 
@@ -58,7 +63,6 @@ const form1 = ref();
 const subim_form = async () => {
 
 
-
     //表单规则校验 、、form1.value.validate 返回一个布尔值
     const result = await form1.value.validate(value => { })
     //所有的表单符合规则之后为true并且勾选了用户协议之后就提交请求 
@@ -67,10 +71,14 @@ const subim_form = async () => {
         console.log("表单数据", Propsform.form);
 
         Propsform.dialogFormVisible = false
+
+        console.log(userInfo.id,"仓库的用户");
+       // localStorage.setItem("uid",userStore.userInfo.id)
+        
         //发送请求
-        /*  loanStore.userAddLoandate(Propsform.form).then(re =>{
+       loanStore.userAddLoandate(userInfo.id,Propsform.form).then(re =>{
      
-             if (re =="200") {
+             if (re == 1) {
              
              return    ElMessage({
                      message:"申请成功了",
@@ -81,16 +89,16 @@ const subim_form = async () => {
                      message:"申请成功了",
                      type:"success"
              })
-         }) */
+        })  
 
         //数据为空
-        Propsform.form.name = "";
-        Propsform.form.contract = "";
-        Propsform.form.date = "";
-        Propsform.form.loanMoney = "";
-        Propsform.form.phone = "";
-        Propsform.chenk = false
-        Propsform.form.region = ""
+        // Propsform.form.name = "";
+        // Propsform.form.contract = "";
+        // Propsform.form.date = "";
+        // Propsform.form.loanMoney = "";
+        // Propsform.form.phone = "";
+        // Propsform.chenk = false
+        // Propsform.form.region = ""
 
 
 
@@ -456,7 +464,15 @@ const subim_form = async () => {
 
     }
 }
-
+.xieyi{
+    display: flex;
+    text-align: center;
+    line-height: 30px;
+    margin-left: 10PX;
+    P{
+        margin-left: 10px;
+    }
+}
 .user_xieyi,
 .user_yinsi {
     text-align: center;

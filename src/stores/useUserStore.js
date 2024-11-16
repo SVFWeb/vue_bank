@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { reqLogin, reqUserInfo, reqRegisterUser, reqForgotUser, reqBalanceUser } from '@/api/user'
 import { useRouter } from 'vue-router';
 
-export const useUserStore = defineStore('user', () => {
+export  const useUserStore = defineStore('user', () => {
   const router = useRouter()
 
   // 当前用户信息

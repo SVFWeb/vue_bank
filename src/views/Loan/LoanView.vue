@@ -186,7 +186,7 @@ const handleClose = (done) => {
                   src="../../../public/image/Z-zh-img/Z-6-PHONE.png"
                   alt=""
                 />
-                联系电话：0777-2697375
+       联系电话：0777-2697375
               </p>
             </div>
           </div>

@@ -35,11 +35,12 @@ export function updataAmount(cid,cLoanAmount){
 }       
  */
 export function addContract(uid,data){
+    
     return request({
         url:"/cont/addcontract",
         method:"post",
         data:{
-            uid:UserStore.$id,//当前用户id
+            uid:uid,//当前用户id
             cid: new Date().getTime(),
             cName:data.contract,
             cLoanAmount:data.loanMoney,

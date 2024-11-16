@@ -1,22 +1,27 @@
 <script setup>
-import { ref, onMounted} from 'vue';
+import { ref, onMounted,watch,nextTick} from 'vue';
 import { storeToRefs } from 'pinia';
 import { useLoanStore } from '@/stores/loan';
 
 const loanStore = useLoanStore();
+
+
 //对仓库进行解构
 const {conList} = storeToRefs(loanStore)
-//测试数据
+
+//获取用户合同
 onMounted(() =>{
-    //获取合同列表
-   loanStore.UserConList("1731423774183")
-  
+loanStore.UserConList(localStorage.getItem("token"))
+    
 })
+
 
 </script>
 
 <template>
+     <el-scrollbar >
     <div class="loan_top">
+       
         <div class="loan_main">
             <h1>我的贷款记录</h1>
             <!-- -->
@@ -41,7 +46,9 @@ onMounted(() =>{
             </div>
            
         </div>
+       
     </div>
+</el-scrollbar>
 </template>
 
 <style scoped lang="less">
@@ -52,7 +59,7 @@ onMounted(() =>{
 
     h1{
         width: 1200px;
-        padding: 0 38px;
+        padding: 20px 40px;
     }
     .loan_one_log{
         width: 1200px;

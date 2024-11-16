@@ -10,17 +10,16 @@ export const useLoanStore = defineStore('loan', () => {
     let conList = ref([]);
     const UserConList = async (uid) => {
         let result = await getUserConList(uid)
-        
-        
         conList.value = result
-        
-
     }
 
     //用户申请贷款
     const userAddLoandate = async (uid,data) => {
 
         let result = await addContract(uid,data);
+
+        console.log(uid,"222");
+        
         if(result == 1){
             return Promise.resolve(200)
         }

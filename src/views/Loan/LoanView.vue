@@ -1,6 +1,11 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
+import { useLoanStore } from "@/stores/loan";
+import { storeToRefs } from "pinia";
 
+
+const loanStore = useLoanStore();
+const {conList} = storeToRefs(loanStore)
 let PropsObj = reactive({
   IsShow: false,
   dialogVisible: false,
@@ -10,40 +15,18 @@ let PropsObj = reactive({
   ZDindex: "1", //控制贷款提醒文本
   DK_DK_show: "0",
   total: 0, //总的借款
-  data: [],
+  data: [], //循环的input数据存放
 });
 //合同测试数据
-let h_list = ref([
-  {
-    id:  "1",
-    name:  "科技贷",
-    conSal:  3000,
-  },
-  {
-    id: "2",
-    name: "科技贷",
-    conSal: 3000,
-  },
-  {
-    id: "3",
-    name: "科技贷",
-    conSal: 4000,
-  },
-]);
-
-let list = ref(["1", "2", "3", "4"]);
-
-//借款总需要还的总金额
-/* const totalSum = computed(() =>{
-
-  h_list.value.forEach(item =>{
-     PropsObj.total += item.conSal
-  })
+onMounted(() =>{
+  //获取用户合同数据
+  loanStore.UserConList(localStorage.getItem("token"));
  
-  return PropsObj.total
-
+  
 })
- */
+
+
+
 
 //复选框change事件
 const chenckChange = (val, item) => {
@@ -52,9 +35,9 @@ const chenckChange = (val, item) => {
 //提交还款
 const subimhander = function (item, index) {
   //获取到输入input还钱的金额
-  console.log(PropsObj.data[index]);
+ // console.log(PropsObj.data[index]);
   //模拟携带请求对金额进行修改
-  h_list.value[index].conSal -= PropsObj.data[index];
+ // h_list.value[index].conSal -= PropsObj.data[index];
 
   //当金额为0时再发请求删除合同
 
@@ -148,31 +131,26 @@ const handleClose = (done) => {
           </div>
           <!-- 资助中心联系方式 -->
           <div class="main_right_text">
-            <a
-              href="javaScript:;"
-              v-if="PropsObj.Zindex == '2'"
-              @click="PropsObj.Zindex = '1'"
-              >点击查看</a
-            >
-            <div class="main_right_pp" v-if="PropsObj.Zindex == '1'">
+          
+            <div class="main_right_pp" >
               <p>
                 <img src="../../../public/image/Z-zh-img/Z-1-name.png" alt="" />
-                资助中心名称：钦州市钦南区学生资助管理中心
+                资助中心名称：xx市xx区学生资助管理中心
               </p>
               <p>
                 <img src="../../../public/image/Z-zh-img/Z-2-ding.png" alt="" />
-                资助中心地址：广西钦州市文峰南路367号钦南区教育局
+                资助中心地址：xx省xx市xx路xxx号xxx教育局
               </p>
               <p>
                 <img
                   src="../../../public/image/Z-zh-img/Z-3-youbian.png"
                   alt=""
                 />
-                邮政编码：535000
+                邮政编码：535xxx
               </p>
               <p>
                 <img src="../../../public/image/Z-zh-img/Z-4-qq.png" alt="" />
-                QQ：273408058
+                QQ：273xxx011
               </p>
               <p>
                 <img
@@ -186,7 +164,7 @@ const handleClose = (done) => {
                   src="../../../public/image/Z-zh-img/Z-6-PHONE.png"
                   alt=""
                 />
-       联系电话：0777-2697375
+       联系电话：0xxx-xxxx375
               </p>
             </div>
           </div>
@@ -289,20 +267,21 @@ const handleClose = (done) => {
           <el-button type="success">全部结清</el-button>
         </div>
 
-        <div class="huan_main1" v-for="(item, index) in h_list" :key="item.id" >
+        <div class="huan_main1"  v-for="item,index in conList" :key="item">
           <div class="huan_top_flex">
-            <p>2023-2024学年合同</p>
+            <p>{{ item.cName }}</p>
             <p>
-              合计（元）：<span style="color: red">￥{{ item.conSal }}</span>
+              合计（元）：<span style="color: red">￥{{ item.cLoanAmount }}</span>
             </p>
           </div>
 
           <div class="huan_main">
             <div class="huan_he">
               <div class="huan_chenk">
+                <!--  :label="item.id"  -->
                 <el-checkbox
-                  @change="chenckChange($event, item)"
-                  :label="item.id"
+                  @change="chenckChange($event,)"
+                 
                   value="11"
                   ><hr
                 /></el-checkbox>
@@ -310,13 +289,13 @@ const handleClose = (done) => {
             </div>
             <div class="huan_yue">
               <p>合同余额（元）</p>
-              <p>￥{{ item.conSal }}</p>
+              <p>￥{{ item.cLoanAmount }}</p>
             </div>
 
-            <div class="huan_e">
+            <!-- <div class="huan_e">
               <p>近期应还金额（元）</p>
               <p>￥000</p>
-            </div>
+            </div> -->
 
             <div class="huan_main_ban_kong"></div>
 

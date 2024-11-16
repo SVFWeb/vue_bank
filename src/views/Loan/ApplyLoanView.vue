@@ -1,13 +1,15 @@
 <script setup>
-import { reactive, ref, useTemplateRef } from 'vue';
+import { onMounted, reactive, ref, useTemplateRef } from 'vue';
 import { storeToRefs } from 'pinia';
 //借款仓库
 import { useLoanStore } from '@/stores/loan';
+
 import { useUserStore } from '@/stores/useUserStore';
 //仓库实例
 const loanStore = useLoanStore();
 const userStore = useUserStore();
 const { userInfo }=storeToRefs(userStore)
+
 
 
 //弹出消息提示
@@ -68,19 +70,14 @@ const subim_form = async () => {
     //所有的表单符合规则之后为true并且勾选了用户协议之后就提交请求 
     if (result && Propsform.chenk) {
         //将表单中的数据包装对象携带发送请求
-        console.log("表单数据", Propsform.form);
 
         Propsform.dialogFormVisible = false
-
-        console.log(userInfo.id,"仓库的用户");
-       // localStorage.setItem("uid",userStore.userInfo.id)
-        
         //发送请求
-       loanStore.userAddLoandate(userInfo.id,Propsform.form).then(re =>{
+       loanStore.userAddLoandate(userInfo.value.id,Propsform.form).then(re =>{
      
              if (re == 1) {
              
-             return    ElMessage({
+             return   ElMessage({
                      message:"申请成功了",
                      type:"success"
                  })
@@ -92,13 +89,13 @@ const subim_form = async () => {
         })  
 
         //数据为空
-        // Propsform.form.name = "";
-        // Propsform.form.contract = "";
-        // Propsform.form.date = "";
-        // Propsform.form.loanMoney = "";
-        // Propsform.form.phone = "";
-        // Propsform.chenk = false
-        // Propsform.form.region = ""
+        Propsform.form.name = "";
+        Propsform.form.contract = "";
+        Propsform.form.date = "";
+        Propsform.form.loanMoney = "";
+        Propsform.form.phone = "";
+        Propsform.chenk = false
+        Propsform.form.region = ""
 
 
 
@@ -317,7 +314,7 @@ const subim_form = async () => {
                             </el-select>
                         </el-form-item>
                         <div class="xieyi">
-                            <el-checkbox v-model="Propsform.chenk"></el-checkbox>
+                            <el-checkbox size="large" v-model="Propsform.chenk"></el-checkbox>
                             <p>
                                 同意之后选中<a class="xie_butt" href="JavaScript:;"
                                     @click="Propsform.user_index = '1'; Propsform.isShow = true">《用户协议》</a>
@@ -325,7 +322,10 @@ const subim_form = async () => {
                                     @click="Propsform.user_index = '2'; Propsform.isShow = true">《隐私政策》</a>
                             </p>
                         </div>
-                        <el-button @click="subim_form" class="form_button" type="primary">提交申请</el-button>
+                        <div class="button">
+                            <el-button @click="subim_form" class="form_button" type="primary">提交申请</el-button>
+
+                        </div>
                     </div>
                 </el-form>
 
@@ -361,7 +361,7 @@ const subim_form = async () => {
     justify-content: space-evenly;
     flex-wrap: wrap;
     margin: 0 auto;
-
+  
     .main_top_list {
         width: 100%;
 
@@ -464,14 +464,21 @@ const subim_form = async () => {
 
     }
 }
+
+.main_form_item{
+        padding: 0 34px;
+    }
 .xieyi{
     display: flex;
     text-align: center;
-    line-height: 30px;
+    line-height: 40px;
     margin-left: 10PX;
     P{
-        margin-left: 10px;
+      margin-left: 6px;
     }
+}
+.button{
+    text-align: center;
 }
 .user_xieyi,
 .user_yinsi {

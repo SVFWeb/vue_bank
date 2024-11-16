@@ -35,7 +35,7 @@ const { getAllPaymentRecord } = flowStore
 onMounted(async () => {
   await getUserInfo({ uid: localStorage.getItem('token') })
 
-  await getAllUserInfo()
+  await getAllUserInfo(localStorage.getItem('token'))
 
   await getAllPaymentRecord(localStorage.getItem('token'))
 

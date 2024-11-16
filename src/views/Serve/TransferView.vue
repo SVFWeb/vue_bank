@@ -21,7 +21,7 @@
 
           <el-form-item prop="payee" style="width: 400px; margin-bottom: 35px" label="选择收款人：">
             <el-select v-model="form.payee" placeholder>
-              <el-option v-for="(item, index) in allUser" :key="index" :label="item.userName" :value="item.uid" />
+              <el-option v-for="(item, index) in allUser" :key="index" :label="item.user_name" :value="item.uid" />
             </el-select>
           </el-form-item>
 
@@ -70,14 +70,14 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useFlowStore } from '@/stores/useFlowStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore()
 const flowStore = useFlowStore()
-const { balanceUser, getUserInfo } = userStore
+const { balanceUser, getUserInfo, getAllUserInfo } = userStore
 const { addPaymentRecord, getAllPaymentRecord } = flowStore
 const { userInfo, allUser } = storeToRefs(userStore)
 const ruleFormRef = ref()
@@ -118,6 +118,8 @@ const submitForm = async (formEl) => {
   await formEl.validate((valid, fields) => {
     if (valid) {
       dialogVisible.value = true
+      console.log(target.value);
+
     }
   })
 }
@@ -166,6 +168,7 @@ async function againTopFunds() {
     uid: userInfo.value.id
   })
 
+  // 转账人
   await addPaymentRecord({
     time: Date.now(),
     id: userInfo.value.id,
@@ -176,7 +179,28 @@ async function againTopFunds() {
     remark: form.remark
   })
 
+  // 更新所有用户的数据
+  await getAllUserInfo(userInfo.value.id)
   await getAllPaymentRecord(localStorage.getItem('token'))
+
+  const target = computed(() => {
+    return allUser.value.filter(item => {
+      return item.uid === form.payee
+    })
+  })
+
+
+  // 向收款人添加记录
+  await addPaymentRecord({
+    time: Date.now(),
+    id: target.value[0].uid,
+    user_name: target.value[0].user_name,
+    financial_type: "他人转账",
+    income_money: form.funds,
+    compute_money: target.value[0].u_balance,
+    remark: form.remark
+  })
+
 
   setTimeout(() => {
     // 消息提示

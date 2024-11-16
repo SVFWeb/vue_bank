@@ -75,6 +75,7 @@ import { useUserStore } from '@/stores/useUserStore';
 import { storeToRefs } from 'pinia';
 
 const store = useUserStore()
+const { balanceUser, getUserInfo } = store
 const { userInfo, allUser } = storeToRefs(store)
 const ruleFormRef = ref()
 const dialogVisible = ref(false)
@@ -127,10 +128,40 @@ const handleClose = (done) => {
 }
 
 //再次确认充值
-function againTopFunds() {
-  
+async function againTopFunds() {
   dialogVisible.value = false
   loading.value = true
+
+  // 选择余额支付
+  if (form.way == '1') {
+    if (form.funds > userInfo.value.balance) {
+      ElMessage({
+        message: '余额不足',
+        type: 'error',
+      })
+      loading.value = false
+      ruleFormRef.value.resetFields()
+      form.remark = ''
+      return
+    } else {
+      await balanceUser({
+        uid: userInfo.value.id,
+        uBalance: '-' + form.funds
+      })
+      loading.value = false
+    }
+  }
+
+  // 修改收款人的金额
+  await balanceUser({
+    uid: form.payee,
+    uBalance: form.funds
+  })
+
+  // 更新用户信息
+  await getUserInfo({
+    uid: userInfo.value.id
+  })
 
   setTimeout(() => {
     // 消息提示
@@ -140,7 +171,9 @@ function againTopFunds() {
     })
     loading.value = false
     ruleFormRef.value.resetFields()
+    form.remark = ''
   }, 500)
+
 }
 
 </script>

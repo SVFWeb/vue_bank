@@ -105,15 +105,19 @@
 </template>
 
 <script setup>
+import { useFlowStore } from '@/stores/useFlowStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { SuccessFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { storeToRefs } from 'pinia';
 import { reactive, ref } from 'vue';
 
-const store = useUserStore()
-const { balanceUser, getUserInfo } = store
-const { userInfo } = storeToRefs(store)
+const userStore = useUserStore()
+const flowStore = useFlowStore()
+const { balanceUser, getUserInfo } = userStore
+const { addPaymentRecord, getAllPaymentRecord } = flowStore
+const { userInfo } = storeToRefs(userStore)
+
 const activeName = ref('bankCard')
 const radio1 = ref('1')
 const dialogVisible = ref(false)
@@ -164,15 +168,29 @@ const submitForm = async (formEl) => {
 async function againTopFunds() {
     dialogVisible.value = false
     loading.value = true
+
     await balanceUser({
         uid: userInfo.value.id,
         uBalance: form.funds
     })
 
-    await getUserInfo({
-        uid: userInfo.value.id
+    // 更新用户数据
+    await getUserInfo({ uid: userInfo.value.id })
+
+    await addPaymentRecord({
+        time: Date.now(),
+        id: userInfo.value.id,
+        user_name: userInfo.value.username,
+        financial_type: "充值",
+        income_money: form.funds,
+        // 要先更新用户数据，才能拿到计算后的金额
+        compute_money: userInfo.value.balance,
+        remark: ""
     })
-    
+
+    await getAllPaymentRecord(localStorage.getItem('token'))
+
+
     setTimeout(() => {
         // 消息提示
         ElMessage({

@@ -38,6 +38,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const store = useUserStore()
 const { userInfo } = storeToRefs(store)
+const { getUserInfo } = store
 
 const name = computed(() => {
   let name = userInfo.value.username.slice(0, 1)
@@ -46,7 +47,7 @@ const name = computed(() => {
 })
 
 // 退出登录
-function outLogin() {
+async function outLogin() {
   localStorage.removeItem('token')
   router.push('/login')
   ElMessage({

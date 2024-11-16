@@ -49,12 +49,13 @@
           </div>
 
           <div class="flow_form">
-            <el-table :data="tableData" style="width: 100%" height="250">
-              <el-table-column fixed prop="date" label="交易时间" width="250" />
-              <el-table-column prop="name" label="用户账户" width="300" />
-              <el-table-column prop="zip" label="财务类型" width="220" />
-              <el-table-column prop="state" label="收支金额" width="220" />
-              <el-table-column prop="city" label="账户余额" width="220" />
+            <el-table :data="newPaymentRecord" style="width: 100%" height="200">
+              <el-table-column fixed prop="time" label="交易时间" width="200" />
+              <el-table-column prop="user_name" label="用户账户" width="200" />
+              <el-table-column prop="financial_type" label="财务类型" width="200" />
+              <el-table-column prop="income_money" label="收支金额" width="200" />
+              <el-table-column prop="compute_money" label="账户余额" width="200" />
+              <el-table-column prop="remark" label="备注" width="200" />
             </el-table>
           </div>
         </div>
@@ -65,69 +66,17 @@
 
 <script setup>
 import router from '@/router';
+import { useFlowStore } from '@/stores/useFlowStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { storeToRefs } from 'pinia';
 
-const store = useUserStore()
-const { userInfo } = storeToRefs(store)
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-08',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-06',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-]
+const userStore = useUserStore()
+const flowStore=useFlowStore()
+const { userInfo } = storeToRefs(userStore)
+const { newPaymentRecord } = storeToRefs(flowStore)
+
+
+
 </script>
 
 <style lang="less" scoped>

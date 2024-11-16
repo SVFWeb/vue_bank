@@ -21,7 +21,7 @@
 
           <el-form-item prop="payee" style="width: 400px; margin-bottom: 35px" label="选择收款人：">
             <el-select v-model="form.payee" placeholder>
-              <el-option v-for="(item, index) in allUser" :label="item.userName" :value="item.uid" />
+              <el-option v-for="(item, index) in allUser" :key="index" :label="item.userName" :value="item.uid" />
             </el-select>
           </el-form-item>
 
@@ -71,12 +71,15 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
+import { useFlowStore } from '@/stores/useFlowStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { storeToRefs } from 'pinia';
 
-const store = useUserStore()
-const { balanceUser, getUserInfo } = store
-const { userInfo, allUser } = storeToRefs(store)
+const userStore = useUserStore()
+const flowStore = useFlowStore()
+const { balanceUser, getUserInfo } = userStore
+const { addPaymentRecord, getAllPaymentRecord } = flowStore
+const { userInfo, allUser } = storeToRefs(userStore)
 const ruleFormRef = ref()
 const dialogVisible = ref(false)
 // 加载
@@ -144,11 +147,11 @@ async function againTopFunds() {
       form.remark = ''
       return
     } else {
+      // 扣除自己的余额
       await balanceUser({
         uid: userInfo.value.id,
         uBalance: '-' + form.funds
       })
-      loading.value = false
     }
   }
 
@@ -162,6 +165,18 @@ async function againTopFunds() {
   await getUserInfo({
     uid: userInfo.value.id
   })
+
+  await addPaymentRecord({
+    time: Date.now(),
+    id: userInfo.value.id,
+    user_name: userInfo.value.username,
+    financial_type: "转账",
+    income_money: '-' + form.funds,
+    compute_money: userInfo.value.balance,
+    remark: form.remark
+  })
+
+  await getAllPaymentRecord(localStorage.getItem('token'))
 
   setTimeout(() => {
     // 消息提示

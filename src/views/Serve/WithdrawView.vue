@@ -71,14 +71,17 @@
 </template>
 
 <script setup>
+import { useFlowStore } from '@/stores/useFlowStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { ElMessage } from 'element-plus'
 import { storeToRefs } from 'pinia';
 import { ref, reactive } from 'vue';
 
-const store = useUserStore()
-const { userInfo } = storeToRefs(store)
-const { balanceUser, getUserInfo } = store
+const userStore = useUserStore()
+const flowStore = useFlowStore()
+const { userInfo } = storeToRefs(userStore)
+const { balanceUser, getUserInfo } = userStore
+const { addPaymentRecord, getAllPaymentRecord } = flowStore
 const randomNumber = ref(Math.floor(Math.random() * (1000 - 99 + 1)) + 1000)
 // 当前选择的银行卡
 const isActive = ref(0)
@@ -137,15 +140,28 @@ async function againWithdraw() {
         })
         loading.value = false
     } else {
+
         await balanceUser({
             uid: userInfo.value.id,
             uBalance: '-' + form.funds
         })
 
-        await getUserInfo({
-            uid: userInfo.value.id
+        await getUserInfo({ uid: userInfo.value.id })
+
+        await addPaymentRecord({
+            time: Date.now(),
+            id: userInfo.value.id,
+            user_name: userInfo.value.username,
+            financial_type: "提现",
+            income_money: '-' + form.funds,
+            // 要先更新用户数据，才能拿到计算后的金额
+            compute_money: userInfo.value.balance,
+            remark: ""
         })
-        
+
+        await getAllPaymentRecord(localStorage.getItem('token'))
+
+
         setTimeout(() => {
             // 消息提示
             ElMessage({

@@ -13,6 +13,7 @@ export const useFlowStore = defineStore('flow', () => {
         if (res === '暂无数据') {
             paymentRecord.splice(0, paymentRecord.length)
         } else {
+            paymentRecord.splice(0, paymentRecord.length)
             Object.assign(paymentRecord, res)
         }
 

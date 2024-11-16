@@ -16,4 +16,4 @@ export const reqForgotUser = (data) => request.post('/user/update/password', dat
 export const reqBalanceUser = (data) => request.put('/user/update/balance', data)
 
 // 获取所有用户的 uid 和 user_name
-export const reqGetAllUserInfo = () => request.get('/user/all')
+export const reqGetAllUserInfo = (id) => request.get(`/user/except/${id}`)

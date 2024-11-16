@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { reqLogin, reqGetAllUserInfo, reqUserInfo, reqRegisterUser, reqForgotUser, reqBalanceUser } from '@/api/user'
 import { useRouter } from 'vue-router';
@@ -19,8 +19,10 @@ export  const useUserStore = defineStore('user', () => {
     phone: '',
     sex: 0,
   })
-  // 所有用户的 uid 和 user_name
+
+  // 所有用户的 uid 、 user_name和u_balance
   const allUser = reactive([])
+
 
   // 用户登录
   async function getUserLogin(data) {
@@ -95,8 +97,8 @@ export  const useUserStore = defineStore('user', () => {
   }
 
   // 获取所有用户的 uid 和 user_name
-  async function getAllUserInfo() {
-    const res = await reqGetAllUserInfo()
+  async function getAllUserInfo(id) {
+    const res = await reqGetAllUserInfo(id)
     Object.assign(allUser, res)
   }
 

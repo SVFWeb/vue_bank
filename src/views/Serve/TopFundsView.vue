@@ -66,15 +66,19 @@
                         </div>
                         <el-divider />
                         <div class="form">
-                            <el-form :model="form" label-width="auto" style="max-width: 200px" :rules="rules"
+
+                            <el-form :model="form" label-width="auto" style="max-width: 300px" :rules="rules"
                                 ref="ruleFormRef">
                                 <el-form-item prop="funds" label="充值金额：">
-                                    <el-input v-model="form.funds" />
+                                    <el-input v-model="form.funds"
+                                        :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
                                 </el-form-item>
                                 <el-form-item prop="password" label="支付密码：">
                                     <el-input show-password v-model="form.password" />
                                 </el-form-item>
                             </el-form>
+
                         </div>
                         <div class="btn">
                             <el-button type="primary" @click="submitForm(ruleFormRef)">确认充值</el-button>
@@ -101,15 +105,19 @@
 </template>
 
 <script setup>
+import { useFlowStore } from '@/stores/useFlowStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { SuccessFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { storeToRefs } from 'pinia';
 import { reactive, ref } from 'vue';
 
-const store = useUserStore()
-const { balanceUser, getUserInfo } = store
-const { userInfo } = storeToRefs(store)
+const userStore = useUserStore()
+const flowStore = useFlowStore()
+const { balanceUser, getUserInfo } = userStore
+const { addPaymentRecord, getAllPaymentRecord } = flowStore
+const { userInfo } = storeToRefs(userStore)
+
 const activeName = ref('bankCard')
 const radio1 = ref('1')
 const dialogVisible = ref(false)
@@ -157,17 +165,32 @@ const submitForm = async (formEl) => {
 }
 
 //再次确认充值
-function againTopFunds() {
+async function againTopFunds() {
     dialogVisible.value = false
     loading.value = true
-    balanceUser({
+
+    await balanceUser({
         uid: userInfo.value.id,
         uBalance: form.funds
-    }).then(() => {
-        getUserInfo({
-            uid: userInfo.value.id
-        })
     })
+
+    // 更新用户数据
+    await getUserInfo({ uid: userInfo.value.id })
+
+    await addPaymentRecord({
+        time: Date.now(),
+        id: userInfo.value.id,
+        user_name: userInfo.value.username,
+        financial_type: "充值",
+        income_money: form.funds,
+        // 要先更新用户数据，才能拿到计算后的金额
+        compute_money: userInfo.value.balance,
+        remark: ""
+    })
+
+    await getAllPaymentRecord(localStorage.getItem('token'))
+
+
     setTimeout(() => {
         // 消息提示
         ElMessage({

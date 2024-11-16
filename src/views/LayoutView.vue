@@ -15,7 +15,7 @@
       <div class="layout_main">
         <RouterView />
       </div>
-      
+
     </div>
   </div>
 </template>
@@ -23,18 +23,23 @@
 <script setup>
 import Menu from '@/components/Menu.vue'
 import Tabber from '@/components/Tabber.vue';
+import { useFlowStore } from '@/stores/useFlowStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { onMounted } from 'vue'
 
-const store = useUserStore()
-const { getUserInfo } = store
+const flowStore = useFlowStore()
+const useStore = useUserStore()
+const { getUserInfo, getAllUserInfo } = useStore
+const { getAllPaymentRecord } = flowStore
 
-onMounted(() => {
-  getUserInfo({
-    uid: localStorage.getItem('token')
-  })
+onMounted(async () => {
+  await getUserInfo({ uid: localStorage.getItem('token') })
+
+  await getAllUserInfo()
+
+  await getAllPaymentRecord(localStorage.getItem('token'))
+
 })
-
 
 
 </script>

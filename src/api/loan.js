@@ -19,7 +19,7 @@ export function updataAmount(cid,cLoanAmount){
     return request({
         url:`/cont/updateAmount?cid=${cid}&cLoanAmount=${cLoanAmount}`,
         method:"post",
-        data
+       
     })
 } 
 
@@ -35,7 +35,6 @@ export function updataAmount(cid,cLoanAmount){
 }       
  */
 export function addContract(uid,data){
-    
     return request({
         url:"/cont/addcontract",
         method:"post",
@@ -50,14 +49,26 @@ export function addContract(uid,data){
 }
 
 //删除合同
-export function delContract(){
+export function delContract(cid){
     return request({
         url:"/cont/delonecid",
         method:"post",
         data:{
-            cid:data
+            cid:cid
         }
     })
 }
 
+//用户修改负债
+///update/liability
+export function userUpdateLiability(uid,uLiability){
+    return request({
+        url:"/user/update/liability",
+        method:"PUT",
+        data:{
+            uid:uid,
+            uLiability:uLiability
+        }
+    })
+}
 

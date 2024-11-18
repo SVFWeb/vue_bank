@@ -70,10 +70,18 @@ import { useFlowStore } from '@/stores/useFlowStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { storeToRefs } from 'pinia';
 
+import { useLoanStore } from '@/stores/loan';
+const loanStore = useLoanStore()
+
 const userStore = useUserStore()
 const flowStore=useFlowStore()
 const { userInfo } = storeToRefs(userStore)
 const { newPaymentRecord } = storeToRefs(flowStore)
+
+// const {totleSum} = storeToRefs(loanStore)
+
+// loanStore.updateUserLiability(localStorage.getItem("token"),"-"+ totleSum.value);
+   
 
 
 

@@ -1,11 +1,14 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, onUpdated, reactive, ref, computed, nextTick } from "vue";
 import { useLoanStore } from "@/stores/loan";
 import { storeToRefs } from "pinia";
+import { ElMessage } from "element-plus";
+import { useUserStore } from "@/stores/useUserStore";
 
-
+const userStore = useUserStore()
 const loanStore = useLoanStore();
-const {conList} = storeToRefs(loanStore)
+const { conList, totleSum } = storeToRefs(loanStore);
+
 let PropsObj = reactive({
   IsShow: false,
   dialogVisible: false,
@@ -18,28 +21,59 @@ let PropsObj = reactive({
   data: [], //循环的input数据存放
 });
 //合同测试数据
-onMounted(() =>{
+onMounted(() => {
   //获取用户合同数据
+
   loanStore.UserConList(localStorage.getItem("token"));
- 
-  
-})
+  //数据挂载之后
 
-
-
+});
 
 //复选框change事件
-const chenckChange = (val, item) => {
-  console.log("22");
-};
-//提交还款
-const subimhander = function (item, index) {
-  //获取到输入input还钱的金额
- // console.log(PropsObj.data[index]);
-  //模拟携带请求对金额进行修改
- // h_list.value[index].conSal -= PropsObj.data[index];
+const chenckChange = (val, item) => {};
 
-  //当金额为0时再发请求删除合同
+//提交还款
+const subimhander =  (item, index) => {
+  //获取到输入input还钱的金额
+  //模拟携带请求对金额进行修改
+  //判断input框里面的值是否为number
+  //
+  if (  typeof PropsObj.data[index] != "number" ) {
+    return ElMessage({
+      type: "error",
+      message: "只能为整数",
+    });
+  }
+  if( PropsObj.data[index] > item.cLoanAmount ){
+    return ElMessage({
+      type: "error",
+      message: "不能大于还款金额",
+    });
+  }
+
+
+  //携带合同id对金额进行修改
+  loanStore.userUpdateConAmount(item.cid, PropsObj.data[index])
+    .then((result) => {
+      if (result == 1) {
+        ElMessage({
+          type: "success",
+          message: "修改成功",
+        });
+      }
+      
+        //修改金额之后对负债进行更新  
+    loanStore.updateUserLiability(item.uid,"-"+PropsObj.data[index]).then(re =>{
+      if(re ==1){
+        userStore.getUserInfo({uid:localStorage.getItem("token")})
+      }
+    })
+    loanStore.UserConList(localStorage.getItem("token"));
+
+  
+  }).catch(err =>{
+        
+  })
 
 };
 
@@ -131,8 +165,7 @@ const handleClose = (done) => {
           </div>
           <!-- 资助中心联系方式 -->
           <div class="main_right_text">
-          
-            <div class="main_right_pp" >
+            <div class="main_right_pp">
               <p>
                 <img src="../../../public/image/Z-zh-img/Z-1-name.png" alt="" />
                 资助中心名称：xx市xx区学生资助管理中心
@@ -164,7 +197,7 @@ const handleClose = (done) => {
                   src="../../../public/image/Z-zh-img/Z-6-PHONE.png"
                   alt=""
                 />
-       联系电话：0xxx-xxxx375
+                联系电话：0xxx-xxxx375
               </p>
             </div>
           </div>
@@ -264,14 +297,17 @@ const handleClose = (done) => {
     >
       <div class="huan_top">
         <div class="quan_butt">
-          <el-button type="success">全部结清</el-button>
+          <el-button type="success" @click="chenckAll">全部结清</el-button>
+          <p>贷款总额：{{ totleSum }}</p>
         </div>
 
-        <div class="huan_main1"  v-for="item,index in conList" :key="item">
+        <div class="huan_main1" v-for="(item, index) in conList" :key="item">
           <div class="huan_top_flex">
             <p>{{ item.cName }}</p>
             <p>
-              合计（元）：<span style="color: red">￥{{ item.cLoanAmount }}</span>
+              合计（元）：<span style="color: red"
+                >￥{{ item.cLoanAmount }}</span
+              >
             </p>
           </div>
 
@@ -279,10 +315,7 @@ const handleClose = (done) => {
             <div class="huan_he">
               <div class="huan_chenk">
                 <!--  :label="item.id"  -->
-                <el-checkbox
-                  @change="chenckChange($event,)"
-                 
-                  value="11"
+                <el-checkbox @change="chenckChange($event)" value="11"
                   ><hr
                 /></el-checkbox>
               </div>
@@ -306,7 +339,7 @@ const handleClose = (done) => {
 
               <el-input
                 size="small"
-                v-model="PropsObj.data[index]"
+                v-model.number.trim="PropsObj.data[index]"
                 style="width: 165px"
                 placeholder="Please input"
               />
@@ -320,6 +353,10 @@ const handleClose = (done) => {
               >
             </div>
           </div>
+        </div>
+
+        <div class="huan_main2" v-if="conList.length < 1">
+          <p>暂时还没有借款合同哦</p>
         </div>
       </div>
     </el-dialog>
@@ -514,6 +551,7 @@ const handleClose = (done) => {
       text-align: center;
       padding: 20px 0;
 
+      
       .main_item1 {
         width: 350px;
         height: 148px;
@@ -564,7 +602,7 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
-        p{
+        p {
           font-size: 21px;
           margin-top: 17px;
           color: white;
@@ -592,7 +630,7 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
-        p{
+        p {
           font-size: 21px;
           margin-top: 17px;
           color: white;
@@ -761,6 +799,15 @@ const handleClose = (done) => {
 
   .huan_main1 {
     margin-bottom: 30px;
+  }
+  .huan_main2 {
+    width: 100%;
+    height: 100px;
+    margin: 0 auto;
+    text-align: center;
+    p {
+      font-size: 20px;
+    }
   }
 
   .huan_top_flex {

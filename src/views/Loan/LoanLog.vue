@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted,watch,nextTick} from 'vue';
+import { ref, onMounted} from 'vue';
 import { storeToRefs } from 'pinia';
 import { useLoanStore } from '@/stores/loan';
 
@@ -68,7 +68,7 @@ loanStore.UserConList(localStorage.getItem("token"))
        
         .loan_one_text{
             width: 100%;
-            border: 1px solid #eaeaea;
+            border: 1px solid #999;
             padding: 25px 30px;
 
             .DK_suss{

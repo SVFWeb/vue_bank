@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { reqLogin, reqGetAllUserInfo, reqUserInfo, reqRegisterUser, reqForgotUser, reqBalanceUser } from '@/api/user'
 import { useRouter } from 'vue-router';
 
-export  const useUserStore = defineStore('user', () => {
+export const useUserStore = defineStore('user', () => {
   const router = useRouter()
 
   // 当前用户信息
@@ -83,6 +83,7 @@ export  const useUserStore = defineStore('user', () => {
   async function forgotUser(data) {
     const res = await reqForgotUser(data)
     if (res) {
+      localStorage.clear()
       router.push('/login')
       ElMessage({
         message: '修改成功',

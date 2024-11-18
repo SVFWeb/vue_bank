@@ -33,10 +33,6 @@ import ForgotView from '@/views/ForgotView.vue'
 import LayoutView from '@/views/LayoutView.vue'
 
 
-
-
-
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -143,15 +139,21 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from) => {
-  const token = localStorage.getItem('token')
-  if (!token && to.name !== 'login') {
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  const publicRoutes = ['/login', '/sign', '/forgot']; // 允许公开访问的路由列表
+
+  if (!token && !publicRoutes.includes(to.path)) {
+    // 如果没有 token 且尝试访问的不是公开路由，则重定向到登录页
     ElMessage({
       message: '请先登录用户',
       type: 'warning',
     })
-    return ({ path: '/login' })
+    return next('/login');
   }
-})
+
+  // 否则继续导航
+  next();
+});
 
 export default router

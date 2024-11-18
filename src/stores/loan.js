@@ -2,7 +2,10 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 //借款qpi
-import { getUserConList, addContract ,updataAmount,delContract,userUpdateLiability} from "@/api/loan"
+import { getUserConList, addContract ,updataAmount,delContract,userUpdateLiability,
+    
+} from "@/api/loan"
+
 //借款仓库
 export const useLoanStore = defineStore('loan', () => {
     //获取用户的所有合同
@@ -54,6 +57,7 @@ export const useLoanStore = defineStore('loan', () => {
             return Promise.resolve("1")
         }
     }
+
     
 
 
@@ -64,7 +68,8 @@ export const useLoanStore = defineStore('loan', () => {
         totleSum,
         userUpdateConAmount,
         userRemoveConract,
-        updateUserLiability
+        updateUserLiability,
+      
 
     }
 })

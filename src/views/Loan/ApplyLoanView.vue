@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref,watch} from "vue";
 //弹出消息提示
 import { ElMessage } from "element-plus";
 import { storeToRefs } from "pinia";
@@ -59,6 +59,10 @@ const handleClose = (done) => {
   done();
   clearFormData();
 };
+
+
+
+
 //表单实例
 const form1 = ref();
 //点击申请按钮后回调
@@ -85,28 +89,43 @@ const subim_form = async () => {
       //获取合同列表
       loanStore.UserConList(localStorage.getItem("token"));
 
-      //请求成功之后更改负债
+     
+
+         //修改用户余额
+         userStore.balanceUser({
+            uid:userInfo.value.id,
+            uBalance:Propsform.form.loanMoney
+         }).then(re =>{   
+        })
+
+      
+      setTimeout(() => {
+
+           //修改用户的负债总数
+        //    loanStore
+        //   .updateUserLiability(userInfo.value.id, totleSum.value)
+        //   .then((re) => {
+        //     console.log("222");
+            
+        //   });
+         //请求成功之后更改负债
       loanStore
         .updateUserLiability(userInfo.value.id, Propsform.form.loanMoney)
         .then((re) => {
           //负债更新之后
           if (re == 1) {
+            console.log("负债111");
+            
             //数据为空
             clearFormData();
           }
         });
 
-      setTimeout(() => {
-        //修改用户的负债总数
-        loanStore
-          .updateUserLiability(userInfo.value.id, totleSum)
-          .then((re) => {});
-
         //获取用户信息
         userStore
           .getUserInfo({ uid: localStorage.getItem("token") })
           .then((re) => {});
-      }, 800);
+      }, 2000);
     });
   }
 };

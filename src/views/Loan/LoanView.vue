@@ -9,6 +9,7 @@ import { RouterLink, useRoute } from "vue-router";
 const userStore = useUserStore();
 const loanStore = useLoanStore();
 const { conList, totleSum } = storeToRefs(loanStore);
+const { userInfo} = storeToRefs(userStore)
 
 let PropsObj = reactive({
   IsShow: false,
@@ -33,7 +34,7 @@ onMounted(() => {
 const chenckChange = (val, item) => {};
 
 //提交还款
-const subimhander = (item, index) => {
+const subimhander = async (item, index) => {
   console.log(PropsObj.data[index], item);
 
   //获取到输入input还钱的金额
@@ -58,18 +59,23 @@ const subimhander = (item, index) => {
     .userUpdateConAmount(item.cid, PropsObj.data[index])
     .then((result) => {
       if (result == 1) {
+       setTimeout(() =>{
         ElMessage({
           type: "success",
           message: "修改成功",
         });
+       },600)
       }
 
       //修改金额之后对负债进行更新
     })
     .catch((err) => {});
 
-  //修改负债
-  loanStore
+
+
+setTimeout(() =>{
+    //修改负债
+    loanStore
     .updateUserLiability(item.uid, "-" + PropsObj.data[index])
     .then((re) => {
       if (re == 1) {
@@ -78,6 +84,27 @@ const subimhander = (item, index) => {
         loanStore.UserConList(localStorage.getItem("token"));
       }
     });
+
+
+
+
+
+},1000)
+
+setTimeout(() =>{
+
+      //修改用户余额
+      userStore.balanceUser({
+      uid: userInfo.value.id ,
+      uBalance: "-"+PropsObj.data[index],
+    })
+    .then((re) => {
+      userStore.getUserInfo({ uid: localStorage.getItem("token") });
+
+      console.log("余额修改成功");
+      
+    });
+},2000)
 
   //当输入的金额和当前合同的金额一致时 则会删除
   if (PropsObj.data[index] == item.cLoanAmount) {
@@ -92,16 +119,9 @@ const subimhander = (item, index) => {
     });
   }
 
-  // for(let index = 0; index < conList.value.length;index++){
-  //   if(conList.value[index] == 0){
-  //     loanStore.userRemoveConract(item.cid).then(re =>{
-
-  //     })
-  //   }
-  // }
 
   //赋空值
-  PropsObj.data[index] = "";
+ // PropsObj.data[index] = "";
 };
 
 //提前还款申请弹出层回调

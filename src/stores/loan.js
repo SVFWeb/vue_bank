@@ -48,6 +48,8 @@ export const useLoanStore = defineStore('loan', () => {
     const updateUserLiability = async (uid,uLiability) =>{
 
         let result = await userUpdateLiability(uid,uLiability)
+        console.log("仓库数据",result);
+        
         if(result == "负债更新成功"){
             return Promise.resolve("1")
         }

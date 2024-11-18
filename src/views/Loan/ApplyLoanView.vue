@@ -1,5 +1,7 @@
 <script setup>
-import { onMounted, reactive, ref, useTemplateRef } from "vue";
+import { onMounted, reactive, ref } from "vue";
+//弹出消息提示
+import { ElMessage } from "element-plus";
 import { storeToRefs } from "pinia";
 //借款仓库
 import { useLoanStore } from "@/stores/loan";
@@ -8,9 +10,8 @@ import { useUserStore } from "@/stores/useUserStore";
 //仓库实例
 const loanStore = useLoanStore();
 const userStore = useUserStore();
-const { userInfo, } = storeToRefs(userStore);
-//弹出消息提示
-import { ElMessage } from "element-plus";
+const { userInfo } = storeToRefs(userStore);
+const { totleSum } = storeToRefs(loanStore);
 
 const Propsform = reactive({
   dialogFormVisible: false, //控制弹出层
@@ -19,10 +20,10 @@ const Propsform = reactive({
     //表单数据
     id: "u1",
     contract: "",
-    name: "",
+    name: userInfo.value.username,
     region: "",
     loanMoney: "", //借款金额
-    phone: "", //用户电话
+    phone: userInfo.value.phone, //用户电话
     date: "", //时间戳
   },
   chenk: false, //单选框
@@ -36,7 +37,7 @@ const rules = reactive({
   ],
   loanMoney: [
     { required: true, message: "金额必填的", trigger: "blur" },
-    { min: 4, max: 5, message: "不得少于1千", trigger: "blur" },
+    { min: 4, max: 6, message: "不得少于1千大于十万", trigger: "blur" },
   ],
   date: [{ required: true, message: "时间必填的", trigger: "blur" }],
   phone: [
@@ -45,10 +46,18 @@ const rules = reactive({
   ],
   region: [{ required: true, message: "地址必填的", trigger: "blur" }],
 });
-
+//清空表单数据
+const clearFormData = () => {
+  Propsform.form.contract = "";
+  Propsform.form.date = "";
+  Propsform.form.loanMoney = "";
+  Propsform.chenk = false;
+  Propsform.form.region = "";
+};
 //弹出层关闭
 const handleClose = (done) => {
   done();
+  clearFormData();
 };
 //表单实例
 const form1 = ref();
@@ -73,30 +82,31 @@ const subim_form = async () => {
           type: "error",
         });
       }
+      //获取合同列表
+      loanStore.UserConList(localStorage.getItem("token"));
 
       //请求成功之后更改负债
-      loanStore.updateUserLiability(userInfo.value.id, Propsform.form.loanMoney)
+      loanStore
+        .updateUserLiability(userInfo.value.id, Propsform.form.loanMoney)
         .then((re) => {
           //负债更新之后
           if (re == 1) {
             //数据为空
-            Propsform.form.name = "";
-            Propsform.form.contract = "";
-            Propsform.form.date = "";
-            Propsform.form.loanMoney = "";
-            Propsform.form.phone = "";
-            Propsform.chenk = false;
-            Propsform.form.region = "";
+            clearFormData();
           }
         });
 
+      setTimeout(() => {
+        //修改总数
+        loanStore
+          .updateUserLiability(userInfo.value.id, totleSum)
+          .then((re) => {});
+
         //获取用户信息
-        userStore.getUserInfo({uid:localStorage.getItem("token")}).then((re) =>{
-            console.log("获取成功了");
-            
-        })
-
-
+        userStore
+          .getUserInfo({ uid: localStorage.getItem("token") })
+          .then((re) => {});
+      }, 800);
     });
   }
 };
@@ -284,6 +294,7 @@ const subim_form = async () => {
               <el-input
                 v-model="Propsform.form.name"
                 placeholder="请输入姓名"
+                :disabled="true"
               />
             </el-form-item>
             <el-form-item prop="loanMoney">
@@ -298,6 +309,7 @@ const subim_form = async () => {
                 v-model="Propsform.form.phone"
                 autocomplete="off"
                 placeholder="请输入您的电话"
+                :disabled="true"
               />
             </el-form-item>
             <el-form-item prop="date">
@@ -427,6 +439,7 @@ const subim_form = async () => {
     text-align: center;
     position: relative;
     margin-bottom: 40px;
+    cursor: pointer;
 
     .main_item_top {
       position: absolute;

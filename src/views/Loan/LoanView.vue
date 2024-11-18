@@ -4,8 +4,9 @@ import { useLoanStore } from "@/stores/loan";
 import { storeToRefs } from "pinia";
 import { ElMessage } from "element-plus";
 import { useUserStore } from "@/stores/useUserStore";
+import { RouterLink, useRoute } from "vue-router";
 
-const userStore = useUserStore()
+const userStore = useUserStore();
 const loanStore = useLoanStore();
 const { conList, totleSum } = storeToRefs(loanStore);
 
@@ -26,34 +27,35 @@ onMounted(() => {
 
   loanStore.UserConList(localStorage.getItem("token"));
   //数据挂载之后
-
 });
 
 //复选框change事件
 const chenckChange = (val, item) => {};
 
 //提交还款
-const subimhander =  (item, index) => {
+const subimhander = (item, index) => {
+  console.log(PropsObj.data[index], item);
+
   //获取到输入input还钱的金额
   //模拟携带请求对金额进行修改
   //判断input框里面的值是否为number
   //
-  if (  typeof PropsObj.data[index] != "number" ) {
+  if (typeof PropsObj.data[index] != "number") {
     return ElMessage({
       type: "error",
       message: "只能为整数",
     });
   }
-  if( PropsObj.data[index] > item.cLoanAmount ){
+  if (PropsObj.data[index] > item.cLoanAmount) {
     return ElMessage({
       type: "error",
       message: "不能大于还款金额",
     });
   }
 
-
-  //携带合同id对金额进行修改
-  loanStore.userUpdateConAmount(item.cid, PropsObj.data[index])
+  // 携带合同id对金额进行修改
+  loanStore
+    .userUpdateConAmount(item.cid, PropsObj.data[index])
     .then((result) => {
       if (result == 1) {
         ElMessage({
@@ -61,20 +63,45 @@ const subimhander =  (item, index) => {
           message: "修改成功",
         });
       }
-      
-        //修改金额之后对负债进行更新  
-    loanStore.updateUserLiability(item.uid,"-"+PropsObj.data[index]).then(re =>{
-      if(re ==1){
-        userStore.getUserInfo({uid:localStorage.getItem("token")})
-      }
+
+      //修改金额之后对负债进行更新
     })
-    loanStore.UserConList(localStorage.getItem("token"));
+    .catch((err) => {});
 
-  
-  }).catch(err =>{
-        
-  })
+  //修改负债
+  loanStore
+    .updateUserLiability(item.uid, "-" + PropsObj.data[index])
+    .then((re) => {
+      if (re == 1) {
+        userStore.getUserInfo({ uid: localStorage.getItem("token") });
 
+        loanStore.UserConList(localStorage.getItem("token"));
+      }
+    });
+
+  //当输入的金额和当前合同的金额一致时 则会删除
+  if (PropsObj.data[index] == item.cLoanAmount) {
+    loanStore.userRemoveConract(item.cid).then((re) => {
+      if (re == 1) {
+        ElMessage({
+          type: "success",
+          message: "合同删除成功",
+        });
+        loanStore.UserConList(localStorage.getItem("token"));
+      }
+    });
+  }
+
+  // for(let index = 0; index < conList.value.length;index++){
+  //   if(conList.value[index] == 0){
+  //     loanStore.userRemoveConract(item.cid).then(re =>{
+
+  //     })
+  //   }
+  // }
+
+  //赋空值
+  PropsObj.data[index] = "";
 };
 
 //提前还款申请弹出层回调
@@ -84,6 +111,9 @@ const PropsHander = () => {
 //提前还款申请弹出层回调弹出层关闭回调
 const handleClose = (done) => {
   done();
+  PropsObj.data.forEach((item, index) => {
+    PropsObj.data[index] = "";
+  });
 };
 </script>
 
@@ -92,12 +122,14 @@ const handleClose = (done) => {
     <div class="gu_main">
       <!-- 头部 -->
       <div class="main_top">
-        <div class="main_item1">
-          <i>
-            <img src="../../../public/image/D-Foot-img/D-edit.png" alt="" />
-          </i>
-          <p>贷款申请</p>
-        </div>
+        <RouterLink to="/loan/applyloan">
+          <div class="main_item1">
+            <i>
+              <img src="../../../public/image/D-Foot-img/D-edit.png" alt="" />
+            </i>
+            <p>贷款申请</p>
+          </div>
+        </RouterLink>
         <div class="main_item2" @click="PropsHander">
           <i>
             <img src="../../../public/image//D-Foot-img/D-huan.png" alt="" />
@@ -298,7 +330,9 @@ const handleClose = (done) => {
       <div class="huan_top">
         <div class="quan_butt">
           <el-button type="success" @click="chenckAll">全部结清</el-button>
-          <p>贷款总额：{{ totleSum }}</p>
+          <p>
+            贷款总额：<span>{{ totleSum }}（元）</span>
+          </p>
         </div>
 
         <div class="huan_main1" v-for="(item, index) in conList" :key="item">
@@ -325,23 +359,15 @@ const handleClose = (done) => {
               <p>￥{{ item.cLoanAmount }}</p>
             </div>
 
-            <!-- <div class="huan_e">
-              <p>近期应还金额（元）</p>
-              <p>￥000</p>
-            </div> -->
-
             <div class="huan_main_ban_kong"></div>
 
             <div class="huan_butt">
-              <div class="huan_butt_width">
-                <el-button type="primary">全部结清</el-button>
-              </div>
+              <div class="huan_butt_width"></div>
 
               <el-input
                 size="small"
                 v-model.number.trim="PropsObj.data[index]"
                 style="width: 165px"
-                placeholder="Please input"
               />
             </div>
             <div class="huan_subim">
@@ -551,7 +577,6 @@ const handleClose = (done) => {
       text-align: center;
       padding: 20px 0;
 
-      
       .main_item1 {
         width: 350px;
         height: 148px;
@@ -561,6 +586,7 @@ const handleClose = (done) => {
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-red.png");
         border-radius: 10px;
+        cursor: pointer;
 
         i {
           display: flex;
@@ -590,6 +616,7 @@ const handleClose = (done) => {
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-yell.png");
         border-radius: 10px;
+        cursor: pointer;
 
         i {
           display: flex;
@@ -618,6 +645,7 @@ const handleClose = (done) => {
         justify-content: center;
         background-image: url("../../../public/image//D-Foot-img/Top-back-green.png");
         border-radius: 10px;
+        cursor: pointer;
 
         i {
           display: flex;
@@ -797,6 +825,15 @@ const handleClose = (done) => {
 
   margin: 0 auto;
 
+  .quan_butt {
+    p {
+      margin: 10px 0;
+      font-size: 18px;
+      span {
+        color: orange;
+      }
+    }
+  }
   .huan_main1 {
     margin-bottom: 30px;
   }
@@ -859,7 +896,7 @@ const handleClose = (done) => {
       .huan_butt_width {
         text-align: center;
         width: 75px;
-        height: 30px;
+        height: 10px;
         margin: 0 auto;
         margin-bottom: 10px;
       }
@@ -867,7 +904,7 @@ const handleClose = (done) => {
 
     .huan_subim {
       .butt {
-        margin-top: 29px;
+        margin-top: 20px;
       }
     }
 

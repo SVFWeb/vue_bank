@@ -123,8 +123,8 @@ const { getUserLogin } = store
 
 
 const form = reactive({
-  username: '15222222222',
-  password: 'nbnb1234',
+  username: '',
+  password: '',
   code: '',
 })
 

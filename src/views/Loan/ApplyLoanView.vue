@@ -97,7 +97,7 @@ const subim_form = async () => {
         });
 
       setTimeout(() => {
-        //修改总数
+        //修改用户的负债总数
         loanStore
           .updateUserLiability(userInfo.value.id, totleSum)
           .then((re) => {});

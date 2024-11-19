@@ -31,8 +31,6 @@ export const useFlowStore = defineStore('flow', () => {
                 time: dayjs(Number(item.time)).format('YYYY-MM-DD')
             }
         })
-        // console.log(res);
-
         return res
     })
 

@@ -9,7 +9,7 @@ import { RouterLink, useRoute } from "vue-router";
 const userStore = useUserStore();
 const loanStore = useLoanStore();
 const { conList, totleSum } = storeToRefs(loanStore);
-const { userInfo} = storeToRefs(userStore)
+const { userInfo } = storeToRefs(userStore)
 
 let PropsObj = reactive({
   IsShow: false,
@@ -31,22 +31,20 @@ onMounted(() => {
 });
 
 //复选框change事件
-const chenckChange = (val, item) => {};
+const chenckChange = (val, item) => {
+
+};
 
 //提交还款
 const subimhander = async (item, index) => {
-  console.log(PropsObj.data[index], item);
 
-  //获取到输入input还钱的金额
-  //模拟携带请求对金额进行修改
-  //判断input框里面的值是否为number
-  //
   if (typeof PropsObj.data[index] != "number") {
     return ElMessage({
       type: "error",
       message: "只能为整数",
     });
   }
+
   if (PropsObj.data[index] > item.cLoanAmount) {
     return ElMessage({
       type: "error",
@@ -54,70 +52,27 @@ const subimhander = async (item, index) => {
     });
   }
 
-  // 携带合同id对金额进行修改
-  loanStore
-    .userUpdateConAmount(item.cid, PropsObj.data[index])
-    .then((result) => {
-      if (result == 1) {
-       setTimeout(() =>{
-        ElMessage({
-          type: "success",
-          message: "修改成功",
-        });
-       },600)
-      }
-
-      //修改金额之后对负债进行更新
-    })
-    .catch((err) => {});
-
-
-
-setTimeout(() =>{
-    //修改负债
-    loanStore
-    .updateUserLiability(item.uid, "-" + PropsObj.data[index])
-    .then((re) => {
-      if (re == 1) {
-        userStore.getUserInfo({ uid: localStorage.getItem("token") });
-
-        loanStore.UserConList(localStorage.getItem("token"));
-      }
-    });
-
-
-
-
-
-},1000)
-
-setTimeout(() =>{
-
-      //修改用户余额
-      userStore.balanceUser({
-      uid: userInfo.value.id ,
-      uBalance: "-"+PropsObj.data[index],
-    })
-    .then((re) => {
-      userStore.getUserInfo({ uid: localStorage.getItem("token") });
-
-      console.log("余额修改成功");
-      
-    });
-},2000)
-
+  // 金额进行修改
+  await loanStore.userUpdateConAmount(item.cid, PropsObj.data[index])
+  //修改负债
+  await loanStore.updateUserLiability(item.uid, "-" + PropsObj.data[index])
+  //修改用户余额
+  await userStore.balanceUser({ uid: userInfo.value.id, uBalance: "-" + PropsObj.data[index], })
   //当输入的金额和当前合同的金额一致时 则会删除
   if (PropsObj.data[index] == item.cLoanAmount) {
-    loanStore.userRemoveConract(item.cid).then((re) => {
-      if (re == 1) {
-        loanStore.UserConList(localStorage.getItem("token"));
-      }
-    });
+    await loanStore.userRemoveConract(item.cid)
   }
 
+  // 更新操作
+  await loanStore.UserConList(localStorage.getItem("token"));
+  await userStore.getUserInfo({ uid: localStorage.getItem("token") });
+  ElMessage({
+    type: "success",
+    message: "还款成功",
+  });
 
-  //赋空值
- // PropsObj.data[index] = "";
+  //重置表单
+  PropsObj.data[index] = "";
 };
 
 //提前还款申请弹出层回调
@@ -152,13 +107,10 @@ const handleClose = (done) => {
           </i>
           <p>提前贷款申请</p>
         </div>
-        <div
-          class="main_item3"
-          @click="
-            PropsObj.IsShow = true;
-            PropsObj.DK_DK_show = '5';
-          "
-        >
+        <div class="main_item3" @click="
+          PropsObj.IsShow = true;
+        PropsObj.DK_DK_show = '5';
+        ">
           <i>
             <img src="../../../public/image//D-Foot-img/D-jindu.png" alt="" />
           </i>
@@ -169,24 +121,9 @@ const handleClose = (done) => {
       <div class="main">
         <div class="main_left">
           <div class="main_left_top">
-            <a
-              href="javaScript:;"
-              @click="PropsObj.ZDindex = '1'"
-              :class="{ active: PropsObj.ZDindex == '1' }"
-              >贷款提醒</a
-            >
-            <a
-              href="javaScript:;"
-              @click="PropsObj.ZDindex = '2'"
-              :class="{ active: PropsObj.ZDindex == '2' }"
-              >征信提醒</a
-            >
-            <a
-              href="javaScript:;"
-              @click="PropsObj.ZDindex = '3'"
-              :class="{ active: PropsObj.ZDindex == '3' }"
-              >还款提醒</a
-            >
+            <a href="javaScript:;" @click="PropsObj.ZDindex = '1'" :class="{ active: PropsObj.ZDindex == '1' }">贷款提醒</a>
+            <a href="javaScript:;" @click="PropsObj.ZDindex = '2'" :class="{ active: PropsObj.ZDindex == '2' }">征信提醒</a>
+            <a href="javaScript:;" @click="PropsObj.ZDindex = '3'" :class="{ active: PropsObj.ZDindex == '3' }">还款提醒</a>
           </div>
           <div class="main_left_text">
             <p v-if="PropsObj.ZDindex == '1'">
@@ -223,10 +160,7 @@ const handleClose = (done) => {
                 资助中心地址：xx省xx市xx路xxx号xxx教育局
               </p>
               <p>
-                <img
-                  src="../../../public/image/Z-zh-img/Z-3-youbian.png"
-                  alt=""
-                />
+                <img src="../../../public/image/Z-zh-img/Z-3-youbian.png" alt="" />
                 邮政编码：535xxx
               </p>
               <p>
@@ -234,17 +168,11 @@ const handleClose = (done) => {
                 QQ：273xxx011
               </p>
               <p>
-                <img
-                  src="../../../public/image/Z-zh-img/Z-5-PhoneRen.png"
-                  alt=""
-                />
+                <img src="../../../public/image/Z-zh-img/Z-5-PhoneRen.png" alt="" />
                 联系人：xxx
               </p>
               <p>
-                <img
-                  src="../../../public/image/Z-zh-img/Z-6-PHONE.png"
-                  alt=""
-                />
+                <img src="../../../public/image/Z-zh-img/Z-6-PHONE.png" alt="" />
                 联系电话：0xxx-xxxx375
               </p>
             </div>
@@ -255,94 +183,61 @@ const handleClose = (done) => {
       <div class="butt">
         <div class="butt_item">
           <i>
-            <img
-              src="../../../public/image//D-Foot-img/D-Foot-book.png"
-              alt=""
-            />
+            <img src="../../../public/image//D-Foot-img/D-Foot-book.png" alt="" />
           </i>
           <div class="butt_item_right">
             <p>申请流程</p>
             <span> 首贷的申请流程及所需材料</span>
-            <a
-              href="javaScript:;"
-              @click="
-                PropsObj.IsShow = true;
-                PropsObj.DK_DK_show = '1';
-              "
-              >点击查看 ></a
-            >
+            <a href="javaScript:;" @click="
+              PropsObj.IsShow = true;
+            PropsObj.DK_DK_show = '1';
+            ">点击查看 ></a>
           </div>
         </div>
         <div class="butt_item">
           <i>
-            <img
-              src="../../../public/image//D-Foot-img/D-Foot-mouey+.png"
-              alt=""
-            />
+            <img src="../../../public/image//D-Foot-img/D-Foot-mouey+.png" alt="" />
           </i>
           <div class="butt_item_right">
             <p>续贷帮助</p>
             <span> 续贷的申请流程及所需材料</span>
-            <a
-              href="javaScript:;"
-              @click="
-                PropsObj.IsShow = true;
-                PropsObj.DK_DK_show = '2';
-              "
-              >点击查看 ></a
-            >
+            <a href="javaScript:;" @click="
+              PropsObj.IsShow = true;
+            PropsObj.DK_DK_show = '2';
+            ">点击查看 ></a>
           </div>
         </div>
         <div class="butt_item">
           <i>
-            <img
-              src="../../../public/image//D-Foot-img/D-Foot-help.png"
-              alt=""
-            />
+            <img src="../../../public/image//D-Foot-img/D-Foot-help.png" alt="" />
           </i>
           <div class="butt_item_right">
             <p>常见问题</p>
             <span>初次贷款申请，续贷等其他常见问题</span>
-            <a
-              href="javaScript:;"
-              @click="
-                PropsObj.IsShow = true;
-                PropsObj.DK_DK_show = '3';
-              "
-              >点击查看 ></a
-            >
+            <a href="javaScript:;" @click="
+              PropsObj.IsShow = true;
+            PropsObj.DK_DK_show = '3';
+            ">点击查看 ></a>
           </div>
         </div>
         <div class="butt_item">
           <i>
-            <img
-              src="../../../public/image//D-Foot-img/D-foot-huan-help.png"
-              alt=""
-            />
+            <img src="../../../public/image//D-Foot-img/D-foot-huan-help.png" alt="" />
           </i>
           <div class="butt_item_right">
             <p>提前还款帮助</p>
             <span>提前还款申请时间及查询</span>
-            <a
-              href="javaScript:;"
-              @click="
-                PropsObj.IsShow = true;
-                PropsObj.DK_DK_show = '4';
-              "
-              >点击查看 ></a
-            >
+            <a href="javaScript:;" @click="
+              PropsObj.IsShow = true;
+            PropsObj.DK_DK_show = '4';
+            ">点击查看 ></a>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 提前还款申请弹出层回调弹出层 -->
-    <el-dialog
-      v-model="PropsObj.dialogVisible"
-      title="提前还款申请"
-      width="964"
-      :before-close="handleClose"
-    >
+    <el-dialog v-model="PropsObj.dialogVisible" title="提前还款申请" width="964" :before-close="handleClose">
       <div class="huan_top">
         <div class="quan_butt">
           <el-button type="success" @click="chenckAll">全部结清</el-button>
@@ -355,9 +250,7 @@ const handleClose = (done) => {
           <div class="huan_top_flex">
             <p>{{ item.cName }}</p>
             <p>
-              合计（元）：<span style="color: red"
-                >￥{{ item.cLoanAmount }}</span
-              >
+              合计（元）：<span style="color: red">￥{{ item.cLoanAmount }}</span>
             </p>
           </div>
 
@@ -365,9 +258,9 @@ const handleClose = (done) => {
             <div class="huan_he">
               <div class="huan_chenk">
                 <!--  :label="item.id"  -->
-                <el-checkbox @change="chenckChange($event)" value="11"
-                  ><hr
-                /></el-checkbox>
+                <el-checkbox @change="chenckChange($event)" value="11">
+                  <hr />
+                </el-checkbox>
               </div>
             </div>
             <div class="huan_yue">
@@ -380,19 +273,10 @@ const handleClose = (done) => {
             <div class="huan_butt">
               <div class="huan_butt_width"></div>
 
-              <el-input
-                size="small"
-                v-model.number.trim="PropsObj.data[index]"
-                style="width: 165px"
-              />
+              <el-input size="small" v-model.number.trim="PropsObj.data[index]" style="width: 165px" />
             </div>
             <div class="huan_subim">
-              <el-button
-                class="butt"
-                @click="subimhander(item, index)"
-                type="primary"
-                >提交申请</el-button
-              >
+              <el-button class="butt" @click="subimhander(item, index)" type="primary">提交申请</el-button>
             </div>
           </div>
         </div>
@@ -404,11 +288,7 @@ const handleClose = (done) => {
     </el-dialog>
 
     <!-- 底部查看帮助弹出层 -->
-    <el-dialog
-      v-model="PropsObj.IsShow"
-      width="964"
-      :before-close="handleClose"
-    >
+    <el-dialog v-model="PropsObj.IsShow" width="964" :before-close="handleClose">
       <div class="ti_huan_dk_help" v-if="PropsObj.DK_DK_show == '5'">
         <h1>首贷流程图</h1>
         <div class="dk_help_text">
@@ -416,13 +296,7 @@ const handleClose = (done) => {
             <p>合同名称</p>
           </div>
           <div class="dk_help_next">
-            <el-steps
-              style="max-width: 1000px"
-              :active="3"
-              align-center
-              finish-status="success"
-              simple
-            >
+            <el-steps style="max-width: 1000px" :active="3" align-center finish-status="success" simple>
               <el-step title="提交申请" />
               <el-step title="远程受理" />
               <el-step title="签订合同" />
@@ -645,6 +519,7 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
+
         p {
           font-size: 21px;
           margin-top: 17px;
@@ -674,6 +549,7 @@ const handleClose = (done) => {
           width: 48px;
           height: 48px;
         }
+
         p {
           font-size: 21px;
           margin-top: 17px;
@@ -845,19 +721,23 @@ const handleClose = (done) => {
     p {
       margin: 10px 0;
       font-size: 18px;
+
       span {
         color: orange;
       }
     }
   }
+
   .huan_main1 {
     margin-bottom: 30px;
   }
+
   .huan_main2 {
     width: 100%;
     height: 100px;
     margin: 0 auto;
     text-align: center;
+
     p {
       font-size: 20px;
     }

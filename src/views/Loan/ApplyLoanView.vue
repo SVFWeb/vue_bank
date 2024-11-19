@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref,watch} from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 //弹出消息提示
 import { ElMessage } from "element-plus";
 import { storeToRefs } from "pinia";
@@ -11,7 +11,6 @@ import { useUserStore } from "@/stores/useUserStore";
 const loanStore = useLoanStore();
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
-const { totleSum } = storeToRefs(loanStore);
 
 const Propsform = reactive({
   dialogFormVisible: false, //控制弹出层
@@ -29,6 +28,7 @@ const Propsform = reactive({
   chenk: false, //单选框
   user_index: "1", // 1用户协议 2 隐私政策
 });
+
 //表单规则
 const rules = reactive({
   loanMoney: [
@@ -38,6 +38,7 @@ const rules = reactive({
   date: [{ required: true, message: "时间必填的", trigger: "blur" }],
   region: [{ required: true, message: "地址必填的", trigger: "blur" }],
 });
+
 //清空表单数据
 const clearFormData = () => {
   Propsform.form.contract = "";
@@ -52,9 +53,6 @@ const handleClose = (done) => {
   clearFormData();
 };
 
-
-
-
 //表单实例
 const form1 = ref();
 //点击申请按钮后回调
@@ -65,60 +63,45 @@ const subim_form = async () => {
   if (result && Propsform.chenk) {
     //将表单中的数据包装对象携带发送请求
     Propsform.dialogFormVisible = false;
+    
     //发送请求
-    loanStore.userAddLoandate(userInfo.value.id, Propsform.form).then((re) => {
-      if (re == 200) {
-        ElMessage({
-          message: "申请成功了",
-          type: "success",
-        });
-      } else {
-        ElMessage({
-          message: "申请失败了",
-          type: "error",
-        });
-      }
-      //获取合同列表
-      loanStore.UserConList(localStorage.getItem("token"));
+    let re = await loanStore.userAddLoandate(userInfo.value.id, Propsform.form)
 
-     
+    if (re == 200) {
+      ElMessage({
+        message: "申请成功了",
+        type: "success",
+      });
+    } else {
+      ElMessage({
+        message: "申请失败了",
+        type: "error",
+      });
+    }
 
-         //修改用户余额
-         userStore.balanceUser({
-            uid:userInfo.value.id,
-            uBalance:Propsform.form.loanMoney
-         }).then(re =>{   
-        })
+    //获取合同列表
+    await loanStore.UserConList(localStorage.getItem("token"));
 
-      
-      setTimeout(() => {
+    //修改用户余额
+    await userStore.balanceUser({
+      uid: userInfo.value.id,
+      uBalance: Propsform.form.loanMoney
+    })
 
-           //修改用户的负债总数
-        //    loanStore
-        //   .updateUserLiability(userInfo.value.id, totleSum.value)
-        //   .then((re) => {
-        //     console.log("222");
-            
-        //   });
-         //请求成功之后更改负债
-      loanStore
-        .updateUserLiability(userInfo.value.id, Propsform.form.loanMoney)
-        .then((re) => {
-          //负债更新之后
-          if (re == 1) {
-            console.log("负债111");
-            
-            //数据为空
-            clearFormData();
-          }
-        });
+    //请求成功之后更改负债
+    await loanStore
+      .updateUserLiability(userInfo.value.id, Propsform.form.loanMoney)
+      .then((re) => {
+        //负债更新之后
+        if (re == 1) {
+          //数据为空
+          clearFormData();
+        }
+      });
 
-        //获取用户信息
-        userStore
-          .getUserInfo({ uid: localStorage.getItem("token") })
-          .then((re) => {});
-      }, 2000);
-    });
+    //获取用户信息
+    await userStore.getUserInfo({ uid: localStorage.getItem("token") });
+
   }
 };
 </script>

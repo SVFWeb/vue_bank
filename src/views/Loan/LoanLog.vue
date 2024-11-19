@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useLoanStore } from '@/stores/loan';
 
@@ -7,80 +7,80 @@ const loanStore = useLoanStore();
 
 
 //对仓库进行解构
-const {conList} = storeToRefs(loanStore)
+const { conList } = storeToRefs(loanStore)
 
 //获取用户合同
-onMounted(() =>{
-loanStore.UserConList(localStorage.getItem("token"))
-    
+onMounted(() => {
+    loanStore.UserConList(localStorage.getItem("token"))
+
 })
 
 
 </script>
 
 <template>
-     <el-scrollbar >
-    <div class="loan_top">
-       
-        <div class="loan_main">
-            <h1>我的贷款记录</h1>
-            <!-- -->
-            <div class="loan_one_log"  v-for="item,index in conList" :key="index" >
-                <div class="loan_one_text">
-                    <!-- <p>用户名：{{ item.cid }}</p> -->
-                    <p class="DK_suss">贷款已完成:</p>
-                    <p>
-                        <!--  -->
-                        <span>贷款时间：{{ item.cTime }}</span>
-                    </p>
-                    <p>
-                        <span>贷款名称：科技贷</span>
-                        <span class="line_sp">|</span>
-                        <!--  -->
-                        <span>贷款金额：<span style="color: orange;">￥{{item.cLoanAmount}}（元）</span></span>
-                    </p>
-                </div>
-                <div class="loan_one_bd">
+    <el-scrollbar>
+        <div class="loan_top">
 
+            <div class="loan_main">
+                <h1>我的贷款记录</h1>
+                <!-- -->
+                <div class="loan_one_log" v-for="item, index in conList" :key="index">
+                    <div class="loan_one_text">
+                        <!-- <p>用户名：{{ item.cid }}</p> -->
+                        <p class="DK_suss">贷款已完成:</p>
+                        <p>
+                            <!--  -->
+                            <span>贷款时间：{{ item.cTime }}</span>
+                        </p>
+                        <p>
+                            <span>贷款名称：科技贷</span>
+                            <span class="line_sp">|</span>
+                            <!--  -->
+                            <span>贷款金额：<span style="color: orange;">￥{{ item.cLoanAmount }}（元）</span></span>
+                        </p>
+                    </div>
+                    <div class="loan_one_bd">
+
+                    </div>
                 </div>
+
             </div>
-           
+
         </div>
-       
-    </div>
-</el-scrollbar>
+    </el-scrollbar>
 </template>
 
 <style scoped lang="less">
-
-.loan_main{
+.loan_main {
     width: 1200px;
     background-color: white;
 
-    h1{
+    h1 {
         width: 1200px;
         padding: 20px 40px;
     }
-    .loan_one_log{
+
+    .loan_one_log {
         width: 1200px;
         padding: 20px 40PX;
         margin-bottom: 10px;
-       
-        .loan_one_text{
+
+        .loan_one_text {
             width: 100%;
             border: 1px solid #999;
             padding: 25px 30px;
 
-            .DK_suss{
+            .DK_suss {
                 font-size: 18px;
                 color: #83c44e;
             }
-            .line_sp{
-                margin: 0  10px;
+
+            .line_sp {
+                margin: 0 10px;
                 color: #eaeaea;
             }
         }
     }
 }
-
 </style>

@@ -31,19 +31,11 @@ const Propsform = reactive({
 });
 //表单规则
 const rules = reactive({
-  name: [
-    { required: true, message: "用户名必填的", trigger: "blur" },
-    { min: 2, max: 5, message: "用户名应在2-5个字符", trigger: "blur" },
-  ],
   loanMoney: [
     { required: true, message: "金额必填的", trigger: "blur" },
     { min: 4, max: 6, message: "不得少于1千大于十万", trigger: "blur" },
   ],
   date: [{ required: true, message: "时间必填的", trigger: "blur" }],
-  phone: [
-    { required: true, message: "电话必填的", trigger: "blur" },
-    { min: 11, max: 11, message: "不得少于11位", trigger: "blur" },
-  ],
   region: [{ required: true, message: "地址必填的", trigger: "blur" }],
 });
 //清空表单数据
@@ -64,7 +56,7 @@ const form1 = ref();
 //点击申请按钮后回调
 const subim_form = async () => {
   //表单规则校验 、、form1.value.validate 返回一个布尔值
-  const result = await form1.value.validate((value) => {});
+  const result = await form1.value.validate((value) => { });
   //所有的表单符合规则之后为true并且勾选了用户协议之后就提交请求
   if (result && Propsform.chenk) {
     //将表单中的数据包装对象携带发送请求
@@ -100,12 +92,12 @@ const subim_form = async () => {
         //修改用户的负债总数
         loanStore
           .updateUserLiability(userInfo.value.id, totleSum)
-          .then((re) => {});
+          .then((re) => { });
 
         //获取用户信息
         userStore
           .getUserInfo({ uid: localStorage.getItem("token") })
-          .then((re) => {});
+          .then((re) => { });
       }, 800);
     });
   }
@@ -265,25 +257,12 @@ const subim_form = async () => {
         </div>
       </div>
       <!-- 申请贷款的弹出层 -->
-      <el-dialog
-        v-model="Propsform.dialogFormVisible"
-        title="申请贷款"
-        width="400"
-        :before-close="handleClose"
-        :center="true"
-      >
-        <el-form
-          :model="Propsform.form"
-          :rules="rules"
-          ref="form1"
-          :validate="subim_form"
-        >
+      <el-dialog v-model="Propsform.dialogFormVisible" title="申请贷款" width="400" :before-close="handleClose"
+        :center="true">
+        <el-form :model="Propsform.form" :rules="rules" ref="form1" :validate="subim_form">
           <div class="main_form_item">
             <el-form-item prop="contract">
-              <el-select
-                v-model="Propsform.form.contract"
-                placeholder="贷款名称"
-              >
+              <el-select v-model="Propsform.form.contract" placeholder="贷款名称">
                 <el-option label="个人贷" value="个人贷" />
                 <el-option label="微捷贷" value="微捷贷" />
                 <el-option label="闪信贷" value="闪信贷" />
@@ -291,36 +270,17 @@ const subim_form = async () => {
               </el-select>
             </el-form-item>
             <el-form-item prop="name">
-              <el-input
-                v-model="Propsform.form.name"
-                placeholder="请输入姓名"
-                :disabled="true"
-              />
+              <el-input v-model="userInfo.username" placeholder="请输入姓名" :disabled="true" />
             </el-form-item>
             <el-form-item prop="loanMoney">
-              <el-input
-                v-model="Propsform.form.loanMoney"
-                autocomplete="off"
-                placeholder="请输入借款金额（元）"
-              />
+              <el-input v-model="Propsform.form.loanMoney" autocomplete="off" placeholder="请输入借款金额（元）" />
             </el-form-item>
             <el-form-item prop="phone">
-              <el-input
-                v-model="Propsform.form.phone"
-                autocomplete="off"
-                placeholder="请输入您的电话"
-                :disabled="true"
-              />
+              <el-input v-model="userInfo.phone" autocomplete="off" placeholder="请输入您的电话" :disabled="true" />
             </el-form-item>
             <el-form-item prop="date">
-              <el-date-picker
-                style="width: 100%"
-                v-model="Propsform.form.date"
-                type="datetime"
-                placeholder="Select date and time"
-                format="YYYY/MM/DD hh:mm:ss"
-                value-format="YYYY-MM-DD h:mm:ss"
-              />
+              <el-date-picker style="width: 100%" v-model="Propsform.form.date" type="datetime"
+                placeholder="Select date and time" format="YYYY/MM/DD hh:mm:ss" value-format="YYYY-MM-DD h:mm:ss" />
             </el-form-item>
 
             <el-form-item prop="region">
@@ -337,42 +297,25 @@ const subim_form = async () => {
             <div class="xieyi">
               <el-checkbox size="large" v-model="Propsform.chenk"></el-checkbox>
               <p>
-                同意之后选中<a
-                  class="xie_butt"
-                  href="JavaScript:;"
-                  @click="
-                    Propsform.user_index = '1';
-                    Propsform.isShow = true;
-                  "
-                  >《用户协议》</a
-                >
-                与<a
-                  class="xie_butt"
-                  href="javaScript:;"
-                  @click="
-                    Propsform.user_index = '2';
-                    Propsform.isShow = true;
-                  "
-                  >《隐私政策》</a
-                >
+                同意之后选中<a class="xie_butt" href="JavaScript:;" @click="
+                  Propsform.user_index = '1';
+                Propsform.isShow = true;
+                ">《用户协议》</a>
+                与<a class="xie_butt" href="javaScript:;" @click="
+                  Propsform.user_index = '2';
+                Propsform.isShow = true;
+                ">《隐私政策》</a>
               </p>
             </div>
             <div class="button">
-              <el-button @click="subim_form" class="form_button" type="primary"
-                >提交申请</el-button
-              >
+              <el-button @click="subim_form" class="form_button" type="primary">提交申请</el-button>
             </div>
           </div>
         </el-form>
       </el-dialog>
 
       <!-- 用户协议和隐私政策 弹出层 -->
-      <el-dialog
-        v-model="Propsform.isShow"
-        width="864"
-        :before-close="handleClose"
-        :center="true"
-      >
+      <el-dialog v-model="Propsform.isShow" width="864" :before-close="handleClose" :center="true">
         <div class="user">
           <div class="user_xieyi" v-if="Propsform.user_index == '1'">
             <h2>用户协议</h2>
@@ -425,8 +368,7 @@ const subim_form = async () => {
         font-weight: bold;
       }
 
-      & .list_item_right p:nth-child(4) {
-      }
+      & .list_item_right p:nth-child(4) {}
     }
   }
 
@@ -497,18 +439,22 @@ const subim_form = async () => {
 .main_form_item {
   padding: 0 34px;
 }
+
 .xieyi {
   display: flex;
   text-align: center;
   line-height: 40px;
   margin-left: 10px;
+
   P {
     margin-left: 6px;
   }
 }
+
 .button {
   text-align: center;
 }
+
 .user_xieyi,
 .user_yinsi {
   text-align: center;

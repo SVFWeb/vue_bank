@@ -83,10 +83,6 @@ const subimhander = (item, index) => {
   if (PropsObj.data[index] == item.cLoanAmount) {
     loanStore.userRemoveConract(item.cid).then((re) => {
       if (re == 1) {
-        ElMessage({
-          type: "success",
-          message: "合同删除成功",
-        });
         loanStore.UserConList(localStorage.getItem("token"));
       }
     });

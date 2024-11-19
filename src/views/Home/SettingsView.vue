@@ -1,15 +1,15 @@
 <template>
   <div class="settings">
-    <div class="settings_container">
+    <div v-loading="false" class="settings_container">
       <div class="evaluation_risk">
-        <div class="mark">80</div>
+        <div class="mark">{{ mark }}</div>
 
         <div class="tab">
-          <span>中风险</span>
+          <span>{{ mark == 100 ? '低风险' : '中风险' }}</span>
         </div>
 
         <div class="text">
-          <span>为了更好的保障您账号的安全，请您继续完善：绑定安全邮箱/设置密码/QQ微信</span>
+          <span>为了更好的保障您账号的安全，请您继续完善个人信息</span>
         </div>
       </div>
 
@@ -47,8 +47,9 @@
             </div>
 
             <div class="right">
-              <p>存在风险，请绑定邮箱</p>
-              <p class="controls">绑定邮箱</p>
+              <p>{{ userInfo.email == undefined ? '存在风险，请绑定邮箱' : userInfo.email }}</p>
+              <p class="controls" @click="changeDialog('绑定或修改邮箱', 1)">{{ userInfo.email == undefined ? '绑定邮箱' : '修改邮箱'
+                }}</p>
             </div>
           </div>
           <div class="setting_item">
@@ -57,8 +58,9 @@
             </div>
 
             <div class="right">
-              <p>存在风险，请绑定QQ微信</p>
-              <p class="controls">绑定QQ</p>
+              <p>{{ userInfo.wechat == undefined ? '存在风险，请绑定微信' : userInfo.wechat }}</p>
+              <p class="controls" @click="changeDialog('绑定或修改微信', 2)">{{ userInfo.wechat == undefined ? '绑定微信' : '修改微信'
+                }}</p>
             </div>
           </div>
           <div class="setting_item">
@@ -74,20 +76,71 @@
         </div>
       </div>
     </div>
+
+    <el-dialog v-model="dialogVisible" title="提示" width="500">
+      <p>{{ text }}</p>
+      <span></span>
+      <el-input v-model="input1" style="width: 240px" />
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogVisible = false; input1 = ''">取消</el-button>
+          <el-button type="primary" @click="OnceMore">
+            确认修改
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { useUserStore } from '@/stores/useUserStore';
 import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const store = useUserStore()
+const { changeUserInfo, getUserInfo } = store
 const { userInfo } = storeToRefs(store)
+const dialogVisible = ref(false)
+const input1 = ref()
+const text = ref()
+const num = ref()
+
+
+const mark = computed(() => {
+  let value = Object.values(userInfo.value)
+  let res = value.filter(item => item == undefined)
+  return 100 - res.length * 10
+})
 
 function changePassword() {
   router.push({ name: 'forgot', query: { action: '修改密码' } })
+}
+
+function changeDialog(value1, value2) {
+  text.value = value1
+  num.value = value2
+  dialogVisible.value = true
+}
+
+async function OnceMore() {
+  switch (num.value) {
+    case 1:
+      await changeUserInfo({ uid: userInfo.value.id, email: input1.value })
+      break
+    case 2:
+      await changeUserInfo({ uid: userInfo.value.id, wechat: input1.value })
+      break
+  }
+  dialogVisible.value = false
+  ElMessage({
+    message: '成功绑定',
+    type: 'success',
+  })
+  await getUserInfo({ uid: userInfo.value.id })
+  input1.value = ''
 }
 
 </script>

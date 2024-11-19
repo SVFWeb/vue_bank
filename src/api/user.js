@@ -17,3 +17,6 @@ export const reqBalanceUser = (data) => request.put('/user/update/balance', data
 
 // 获取所有用户的 uid 和 user_name
 export const reqGetAllUserInfo = (id) => request.get(`/user/except/${id}`)
+
+// 修改用户信息
+export const reqChangeUserInfo = (data) => request.put('/user/update', data)

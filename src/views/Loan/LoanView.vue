@@ -4,7 +4,7 @@ import { useLoanStore } from "@/stores/loan";
 import { storeToRefs } from "pinia";
 import { ElMessage } from "element-plus";
 import { useUserStore } from "@/stores/useUserStore";
-import { RouterLink, useRoute } from "vue-router";
+import { RouterLink } from "vue-router";
 
 const userStore = useUserStore();
 const loanStore = useLoanStore();
@@ -29,11 +29,6 @@ onMounted(() => {
   loanStore.UserConList(localStorage.getItem("token"));
   //数据挂载之后
 });
-
-//复选框change事件
-const chenckChange = (val, item) => {
-
-};
 
 //提交还款
 const subimhander = async (item, index) => {

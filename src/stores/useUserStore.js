@@ -1,6 +1,6 @@
-import { reactive, computed } from 'vue'
+import { reactive } from 'vue'
 import { defineStore } from 'pinia'
-import { reqLogin, reqGetAllUserInfo, reqUserInfo, reqRegisterUser, reqForgotUser, reqBalanceUser } from '@/api/user'
+import { reqLogin, reqChangeUserInfo, reqGetAllUserInfo, reqUserInfo, reqRegisterUser, reqForgotUser, reqBalanceUser } from '@/api/user'
 import { useRouter } from 'vue-router';
 
 export const useUserStore = defineStore('user', () => {
@@ -18,6 +18,8 @@ export const useUserStore = defineStore('user', () => {
     paymentPassword: '',
     phone: '',
     sex: 0,
+    email:'',
+    wechat:''
   })
 
   // 所有用户的 uid 、 user_name和u_balance
@@ -58,6 +60,8 @@ export const useUserStore = defineStore('user', () => {
       userInfo.paymentPassword = res.uPaymentPassword
       userInfo.phone = res.uPhone
       userInfo.sex = res.uSex
+      userInfo.email=res.email
+      userInfo.wechat=res.wechat
     }
   }
 
@@ -103,5 +107,10 @@ export const useUserStore = defineStore('user', () => {
     Object.assign(allUser, res)
   }
 
-  return { userInfo, allUser, getUserLogin, getUserInfo, registerUser, forgotUser, balanceUser, getAllUserInfo }
+  // 修改用户信息
+  async function changeUserInfo(data) {
+    await reqChangeUserInfo(data)
+  }
+
+  return { userInfo, allUser, changeUserInfo, getUserLogin, getUserInfo, registerUser, forgotUser, balanceUser, getAllUserInfo }
 })

@@ -5,9 +5,12 @@ import { storeToRefs } from "pinia";
 import { ElMessage } from "element-plus";
 import { useUserStore } from "@/stores/useUserStore";
 import { RouterLink } from "vue-router";
+import { useFlowStore } from "@/stores/useFlowStore";
 
 const userStore = useUserStore();
 const loanStore = useLoanStore();
+const flowStore = useFlowStore()
+const { getAllPaymentRecord, addPaymentRecord } = flowStore
 const { conList, totleSum } = storeToRefs(loanStore);
 const { userInfo } = storeToRefs(userStore)
 
@@ -61,6 +64,20 @@ const subimhander = async (item, index) => {
   // 更新操作
   await loanStore.UserConList(localStorage.getItem("token"));
   await userStore.getUserInfo({ uid: localStorage.getItem("token") });
+
+  await addPaymentRecord({
+    time: Date.now(),
+    id: userInfo.value.id,
+    user_name: userInfo.value.username,
+    financial_type: '还款',
+    income_money: PropsObj.data[index],
+    compute_money: userInfo.value.liability,
+    remark: "余额还款"
+  })
+
+  await getAllPaymentRecord(userInfo.value.id)
+
+
   ElMessage({
     type: "success",
     message: "还款成功",

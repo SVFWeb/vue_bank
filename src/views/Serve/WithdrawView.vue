@@ -39,9 +39,7 @@
                             </ul>
                         </el-form-item>
                         <el-form-item prop="funds" label="提现金额：">
-                            <el-input v-model="form.funds"
-                                :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
+                            <el-input v-model="form.funds"/>
                         </el-form-item>
                         <el-form-item prop="password" label="支付密码：">
                             <el-input show-password v-model="form.password" />

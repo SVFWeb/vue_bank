@@ -7,9 +7,12 @@ import { storeToRefs } from "pinia";
 import { useLoanStore } from "@/stores/loan";
 
 import { useUserStore } from "@/stores/useUserStore";
+import { useFlowStore } from "@/stores/useFlowStore";
 //仓库实例
 const loanStore = useLoanStore();
 const userStore = useUserStore();
+const flowStore = useFlowStore()
+const { addPaymentRecord, getAllPaymentRecord } = flowStore
 const { userInfo } = storeToRefs(userStore);
 
 const Propsform = reactive({
@@ -63,7 +66,7 @@ const subim_form = async () => {
   if (result && Propsform.chenk) {
     //将表单中的数据包装对象携带发送请求
     Propsform.dialogFormVisible = false;
-    
+
     //发送请求
     let re = await loanStore.userAddLoandate(userInfo.value.id, Propsform.form)
 
@@ -89,18 +92,26 @@ const subim_form = async () => {
     })
 
     //请求成功之后更改负债
-    await loanStore
-      .updateUserLiability(userInfo.value.id, Propsform.form.loanMoney)
-      .then((re) => {
-        //负债更新之后
-        if (re == 1) {
-          //数据为空
-          clearFormData();
-        }
-      });
-
+    await loanStore.updateUserLiability(userInfo.value.id, Propsform.form.loanMoney)
     //获取用户信息
     await userStore.getUserInfo({ uid: localStorage.getItem("token") });
+  
+    await addPaymentRecord({
+      time: Date.now(),
+      id: userInfo.value.id,
+      user_name: userInfo.value.username,
+      financial_type: Propsform.form.contract,
+      income_money: Propsform.form.loanMoney,
+      // 要先更新用户数据，才能拿到计算后的金额
+      compute_money: userInfo.value.liability,
+      remark: "贷款"
+    })
+
+    await getAllPaymentRecord(userInfo.value.id)
+
+    //数据为空
+    clearFormData();
+
 
   }
 };
